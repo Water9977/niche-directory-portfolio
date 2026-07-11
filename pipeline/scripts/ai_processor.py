@@ -4,7 +4,8 @@ import json
 import re
 import sys
 import time
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 # Reconfigure terminal output to support UTF-8 on Windows
 if hasattr(sys.stdout, "reconfigure"):
@@ -24,9 +25,10 @@ if not GEMINI_API_KEY:
                     GEMINI_API_KEY = line.replace("GEMINI_API_KEY=", "").strip()
                     break
 
-# Configure genai
+# Configure genai client
+client = None
 if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+    client = genai.Client(api_key=GEMINI_API_KEY)
 else:
     print("WARNING: GEMINI_API_KEY not found in environment or .env file.")
 
@@ -107,12 +109,16 @@ Respond ONLY with valid JSON. No explanation.
 
 def clean_json_response(text):
     # Strip markdown block formatting if present
-    if text.startswith("```"):
-        # Remove opening ```json or ```
+    if "```" in text:
         text = re.sub(r"^```[a-zA-Z]*\s*", "", text)
-        # Remove closing ```
         text = re.sub(r"\s*```$", "", text)
-    return text.strip()
+    text = text.strip()
+    
+    # Extract the first matching JSON object
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    if match:
+        return match.group(0)
+    return text
 
 def generate_slug(name, city, state):
     # Convert name-city-state to url friendly slug
@@ -124,7 +130,7 @@ def generate_slug(name, city, state):
     return slug
 
 def process_enrichment(limit=5):
-    if not GEMINI_API_KEY:
+    if not client:
         print("Error: GEMINI_API_KEY is not configured. Cannot proceed with AI enrichment.")
         return
 
@@ -149,7 +155,6 @@ def process_enrichment(limit=5):
         return
 
     print(f"Found {len(pages)} pages to enrich via Gemini API.")
-    model = genai.GenerativeModel("gemini-1.5-flash") # standard genai model name
 
     for page_id, markdown, raw_id, name, city, state, niche, website, rating, reviews_count in pages:
         print(f"\nProcessing AI Enrichment for: '{name}' ({niche}) in {city}, {state}")
@@ -162,7 +167,15 @@ def process_enrichment(limit=5):
         prompt = prompt_template + f"\nWebpage content:\n---\n{markdown}\n---"
         
         try:
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(
+                model='gemini-3.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    max_output_tokens=4096,
+                    thinking_config=types.ThinkingConfig(thinking_budget=1024)
+                )
+            )
             raw_text = response.text
             clean_text = clean_json_response(raw_text)
             data = json.loads(clean_text)
@@ -193,7 +206,7 @@ def process_enrichment(limit=5):
                         slug = ?, display_name = ?, city = ?, state = ?, website = ?, rating = ?, reviews_count = ?,
                         pricing_min = ?, pricing_max = ?, pricing_period = ?, pricing_note = ?,
                         amenities_json = ?, ai_summary = ?, ai_pros_json = ?, ai_cons_json = ?, source_snippet = ?,
-                        enrichment_status = 'enriched', enrichment_model = 'gemini-1.5-flash', last_verified = datetime('now'), published = 1
+                        enrichment_status = 'enriched', enrichment_model = 'gemini-3.5-flash', last_verified = datetime('now'), published = 1
                     WHERE id = ?
                 """, (slug, name, city, state, website, rating, reviews_count, pricing_min, pricing_max, pricing_period, pricing_note,
                       amenities, ai_summary, ai_pros, ai_cons, source_snippet, listing_id))
@@ -204,7 +217,7 @@ def process_enrichment(limit=5):
                         pricing_min, pricing_max, pricing_period, pricing_note,
                         amenities_json, ai_summary, ai_pros_json, ai_cons_json, source_snippet,
                         enrichment_status, enrichment_model, published
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'enriched', 'gemini-1.5-flash', 1)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'enriched', 'gemini-3.5-flash', 1)
                 """, (raw_id, niche, slug, name, city, state, website, rating, reviews_count,
                       pricing_min, pricing_max, pricing_period, pricing_note,
                       amenities, ai_summary, ai_pros, ai_cons, source_snippet))
@@ -277,4 +290,10 @@ def process_enrichment(limit=5):
     print("\nAI Enrichment batch completed.")
 
 if __name__ == "__main__":
-    process_enrichment()
+    limit = 5
+    if len(sys.argv) > 1:
+        try:
+            limit = int(sys.argv[1])
+        except ValueError:
+            pass
+    process_enrichment(limit=limit)

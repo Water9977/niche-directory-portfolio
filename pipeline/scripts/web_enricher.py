@@ -45,7 +45,7 @@ def scrape_website_content(url):
         print(f"Firecrawl scrape request error for {url}: {e}")
         return None, None, 500
 
-def enrich_pending_websites(limit=20):
+def enrich_pending_websites(limit=20, niche=None):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
@@ -58,12 +58,19 @@ def enrich_pending_websites(limit=20):
     conn.commit()
     
     # Query listings with pending website crawls
-    cursor.execute("""
+    query = """
         SELECT id, name, website 
         FROM raw_listings 
         WHERE scrape_status = 'pending' AND website IS NOT NULL AND website != ''
-        LIMIT ?
-    """, (limit,))
+    """
+    params = []
+    if niche:
+        query += " AND niche = ?"
+        params.append(niche)
+    query += " LIMIT ?"
+    params.append(limit)
+    
+    cursor.execute(query, params)
     listings = cursor.fetchall()
     
     if not listings:
@@ -121,4 +128,13 @@ def enrich_pending_websites(limit=20):
     print("\nBatch website scraping completed.")
 
 if __name__ == "__main__":
-    enrich_pending_websites(limit=2)
+    limit = 2
+    niche = None
+    if len(sys.argv) > 1:
+        try:
+            limit = int(sys.argv[1])
+        except ValueError:
+            pass
+    if len(sys.argv) > 2:
+        niche = sys.argv[2]
+    enrich_pending_websites(limit=limit, niche=niche)
