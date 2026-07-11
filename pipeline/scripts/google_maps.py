@@ -12,8 +12,11 @@ if hasattr(sys.stdout, "reconfigure"):
 
 
 # Load environment variables
-EXA_API_KEY = "91f86c5b-b079-4c60-865e-39ba27510725"
-FIRECRAWL_API_KEY = "fc-57d857b3980a45009444860f390c1919"
+from dotenv import load_dotenv
+load_dotenv()
+
+EXA_API_KEY = os.environ.get("EXA_API_KEY")
+FIRECRAWL_API_KEY = os.environ.get("FIRECRAWL_API_KEY")
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "directory.db")
 

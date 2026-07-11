@@ -10,7 +10,10 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 
-FIRECRAWL_API_KEY = "fc-57d857b3980a45009444860f390c1919"
+from dotenv import load_dotenv
+load_dotenv()
+
+FIRECRAWL_API_KEY = os.environ.get("FIRECRAWL_API_KEY")
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "directory.db")
 
 def scrape_website_content(url):
