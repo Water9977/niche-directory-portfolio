@@ -347,9 +347,9 @@ ENRICHER_CONFIG = {
 
 ```python
 AI_PROCESSOR_CONFIG = {
-    "model": "gemini-2.5-flash",
-    "temperature": 0.1,                  # Low temp for factual extraction
-    "max_output_tokens": 2048,
+    "model": "gemini-3.5-flash",
+    "thinking_budget": 1024,
+    "max_output_tokens": 4096,
     "batch_size": 10,                    # Process 10 listings per batch
     "delay_between_batches_sec": 2,
     "retry_on_failure": 2,
@@ -925,7 +925,7 @@ web3-rvparks/
 | **Styling** | Vanilla CSS (no Tailwind) | Maximum control, smallest bundle, no build dependency |
 | **Data Pipeline** | Python 3.12 + SQLite | Local-only, zero server costs, easy to script |
 | **Scraping** | Firecrawl MCP + Playwright MCP | Handles JS-heavy sites, clean markdown output |
-| **AI Extraction** | Gemini 2.5 Flash API | Cheapest per-token cost, structured JSON output |
+| **AI Extraction** | Gemini 3.5 Flash API | Thinking-enabled reasoning, cheapest per-token cost, structured JSON output |
 | **Hosting** | Cloudflare Pages (primary) | Free tier, unlimited bandwidth, global CDN |
 | **Domain Registrar** | Cloudflare Registrar | At-cost pricing ($8–$12/year per .com) |
 | **Analytics** | Plausible Analytics (self-hosted) or Umami | Privacy-friendly, no cookie banners needed |
