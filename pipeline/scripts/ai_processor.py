@@ -166,16 +166,38 @@ def process_enrichment(limit=5):
             
         prompt = prompt_template + f"\nWebpage content:\n---\n{markdown}\n---"
         
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.5-flash',
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    max_output_tokens=4096,
-                    thinking_config=types.ThinkingConfig(thinking_budget=1024)
+        response = None
+        max_retries = 4
+        for attempt in range(max_retries):
+            try:
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        max_output_tokens=4096,
+                        thinking_config=types.ThinkingConfig(thinking_budget=1024)
+                    )
                 )
-            )
+                break
+            except Exception as e:
+                err_msg = str(e).upper()
+                if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg or "LIMIT" in err_msg:
+                    sleep_time = 15 * (attempt + 1)
+                    match = re.search(r"retry in ([\d\.]+)s", str(e), re.IGNORECASE)
+                    if match:
+                        sleep_time = float(match.group(1)) + 1.5
+                    print(f"Rate limit hit: {e}. Retrying in {sleep_time:.2f} seconds... (Attempt {attempt+1}/{max_retries})")
+                    time.sleep(sleep_time)
+                else:
+                    print(f"API Error: {e}")
+                    break
+                    
+        if not response:
+            print(f"Failed to enrich {name} due to rate limits or API errors.")
+            continue
+            
+        try:
             raw_text = response.text
             clean_text = clean_json_response(raw_text)
             data = json.loads(clean_text)
