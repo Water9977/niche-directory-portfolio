@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.astro/
+
+# SQLite database (local only — never commit data)
+pipeline/data/*.db
+pipeline/data/*.db-journal
+pipeline/data/*.db-wal
+pipeline/data/*.db-shm
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Antigravity / Gemini agent state (keep .agents/, exclude runtime)
+.gemini/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+
+# Temporary scratch files
+scratch/
