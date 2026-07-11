@@ -1,0 +1,347 @@
+---
+import Layout from '../layouts/Layout.astro';
+import listings from '../data/listings.json';
+import Card from '../components/Card.astro';
+import FAQ from '../components/FAQ.astro';
+
+const states = [
+  { name: 'Montana', code: 'mt', cities: ['West Glacier', 'Cooke City', 'Gardiner'] },
+  { name: 'Utah', code: 'ut', cities: ['Moab', 'Springdale', 'Kanab'] },
+  { name: 'Arizona', code: 'az', cities: ['Sedona', 'Tusayan', 'Valle'] },
+  { name: 'Colorado', code: 'co', cities: ['Estes Park'] },
+  { name: 'Tennessee', code: 'tn', cities: ['Pigeon Forge', 'Townsend'] },
+  { name: 'Maine', code: 'me', cities: ['Bar Harbor'] },
+  { name: 'South Dakota', code: 'sd', cities: ['Custer'] }
+];
+
+const getCityCount = (city: string, state: string) => {
+  return listings.filter(l => l.city.toLowerCase() === city.toLowerCase() && l.state.toLowerCase() === state.toLowerCase()).length;
+};
+
+const featuredListings = listings.filter(l => l.rating && l.rating >= 4.5).slice(0, 3);
+
+const faqItems = [
+  {
+    question: "Why is cell signal verified data so important for RV campgrounds?",
+    answer: "Most national campground platforms rely on user reviews which are subjective and often outdated. Camp Connected tracks carrier-specific signal strengths (Verizon, T-Mobile, AT&T) alongside verified Wi-Fi speed reports to ensure remote workers and digital nomads can confidently attend Zoom calls and meet project deadlines."
+  },
+  {
+    question: "Do these campgrounds support Starlink connectivity?",
+    answer: "Yes, our detailed facility profile pages identify whether campsite locations have clear northern-sky access for Starlink or are obstructed by heavy forest cover. We also list on-site Wi-Fi capabilities."
+  },
+  {
+    question: "What is the average nightly cost for an RV site with hookups?",
+    answer: "Nightly rates for standard back-in sites with partial hookups (water & electric) start around $45 to $65. Premium pull-through sites featuring full hookups (50 Amp power, sewer, water) in popular national park gateways range from $85 to $130 per night during peak summer seasons."
+  }
+];
+---
+
+<Layout
+  title="Camp Connected — RV Parks with Verified Cell Signal & Wi-Fi"
+  description="Find RV campgrounds and national park gateway resorts with verified Verizon, T-Mobile, and AT&T signal strengths and Wi-Fi speeds."
+>
+  <!-- Hero Section -->
+  <section class="hero section">
+    <div class="container hero-container">
+      <div class="hero-content animate-fade-in">
+        <span class="hero-tag">Verified Connectivity</span>
+        <h1>Never Lose Connection While Camping</h1>
+        <p>Tired of checking into RV parks only to find zero cell bars and dead Wi-Fi? We compile carrier signal audits, Starlink clearances, and verified campground Wi-Fi speeds near national parks so you can work and travel smoothly.</p>
+        <div class="hero-actions">
+          <a href="#browse" class="btn btn-primary">Browse Campgrounds</a>
+          <a href="#about" class="btn btn-outline">Our Connectivity Audits</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse Section -->
+  <section id="browse" class="section browse-section">
+    <div class="container">
+      <h2 class="section-title">Browse Campgrounds by State</h2>
+      <p class="section-subtitle">Select a state and city to view verified signal profiles, nightly rates, and maximum RV length allowances.</p>
+      
+      <div class="grid grid-3">
+        {states.map(state => (
+          <div class="state-card">
+            <h3>{state.name}</h3>
+            <div class="city-links">
+              {state.cities.map(city => {
+                const count = getCityCount(city, state.code);
+                const href = `/${state.code}/${city.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+                return (
+                  <a href={href} class="city-link">
+                    <span class="city-name">{city}</span>
+                    <span class="city-count">{count} {count === 1 ? 'listing' : 'listings'}</span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Section -->
+  {featuredListings.length > 0 && (
+    <section class="section featured-section">
+      <div class="container">
+        <h2 class="section-title">Top Rated Digital Nomad Campsites</h2>
+        <p class="section-subtitle">Campgrounds featuring strong verified LTE/5G signals and modern office-ready Wi-Fi connections.</p>
+        
+        <div class="grid grid-3">
+          {featuredListings.map(item => (
+            <Card
+              slug={item.slug}
+              displayName={item.displayName}
+              city={item.city}
+              state={item.state}
+              rating={item.rating}
+              pricingMin={item.pricingMin}
+              pricingPeriod={item.pricingPeriod}
+              pricingNote={item.pricingNote}
+              verizonSignal={item.nicheFields.verizonSignal}
+              tmobileSignal={item.nicheFields.tmobileSignal}
+              attSignal={item.nicheFields.attSignal}
+              wifiAvailable={item.nicheFields.wifiAvailable}
+              maxRvLengthFt={item.nicheFields.maxRvLengthFt}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Connectivity Specifications Section -->
+  <section id="about" class="section info-section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-content">
+          <h2>Nomad-First Signal Audits</h2>
+          <p>We believe reliable internet is as essential as running water. We audit campsites using three main factors:</p>
+          <ul class="info-list">
+            <li>
+              <strong>Carrier Signal Verification:</strong> Real strength levels for Verizon, T-Mobile, and AT&T so you know whether you need a signal booster.
+            </li>
+            <li>
+              <strong>Starlink Obstruction:</strong> Mapping tree line cover to check if you can use your satellite dish from your site.
+            </li>
+            <li>
+              <strong>Verified Wi-Fi Speeds:</strong> We log actual download/upload speeds on the campground's office networks.
+            </li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>Looking for Affiliate Gear?</h4>
+          <p>We link to top-rated signal boosters (WeBoost), Starlink mounts, and mobile routers to keep your rig connected anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Connectivity, gear, and RV park booking details.</p>
+      <FAQ items={faqItems} />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Styles */
+  .hero {
+    background: linear-gradient(135deg, var(--primary-light) 0%, hsl(120, 20%, 98%) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-container {
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-content {
+    max-width: 780px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    color: var(--text-main);
+    margin-bottom: var(--space-md);
+    line-height: 1.15;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  /* Section Headers */
+  .section-title {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: var(--space-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Browse Cards */
+  .state-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .state-card h3 {
+    font-size: 1.35rem;
+    margin-bottom: var(--space-lg);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: var(--space-xs);
+  }
+
+  .city-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .city-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-page);
+    border: 1px solid transparent;
+  }
+
+  .city-link:hover {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+  }
+
+  .city-name {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .city-count {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background-color: var(--bg-card);
+    padding: 2px 8px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+  }
+
+  /* Info Section */
+  .info-section {
+    background-color: var(--secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-grid {
+    display: grid;
+    gap: var(--space-2xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .info-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .info-content h2 {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .info-list {
+    list-style: none;
+    margin-top: var(--space-md);
+  }
+
+  .info-list li {
+    margin-bottom: var(--space-md);
+    position: relative;
+    padding-left: var(--space-xl);
+  }
+
+  .info-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .info-card {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .info-card h4 {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .info-card p {
+    color: var(--primary-light);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 {
+      font-size: 2.25rem;
+    }
+  }
+</style>

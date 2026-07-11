@@ -1,0 +1,155 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+export async function getStaticPaths() {
+  const uniqueStates = [...new Set(listings.map(l => l.state.toLowerCase()))];
+  const defaultStates = ['mt', 'ut', 'az', 'co', 'tn', 'me', 'sd'];
+  const finalStates = uniqueStates.length > 0 ? uniqueStates : defaultStates;
+  return finalStates.map(state => {
+    return {
+      params: { state },
+      props: { stateCode: state }
+    };
+  });
+}
+
+const { stateCode } = Astro.props;
+
+// Filter listings for this state
+const stateListings = listings.filter(l => l.state.toLowerCase() === stateCode.toLowerCase());
+
+const stateNames: Record<string, string> = {
+  mt: 'Montana',
+  ut: 'Utah',
+  az: 'Arizona',
+  co: 'Colorado',
+  tn: 'Tennessee',
+  me: 'Maine',
+  sd: 'South Dakota'
+};
+const stateName = stateNames[stateCode.toLowerCase()] || stateCode.toUpperCase();
+
+// Group listings by city in this state
+const citiesMap = stateListings.reduce((acc: Record<string, typeof listings>, item) => {
+  const city = item.city;
+  if (!acc[city]) {
+    acc[city] = [];
+  }
+  acc[city].push(item);
+  return acc;
+}, {});
+
+// Default cities if no listings are present
+const defaultCities: Record<string, string[]> = {
+  mt: ['West Glacier', 'Cooke City', 'Gardiner'],
+  ut: ['Moab', 'Springdale', 'Kanab'],
+  az: ['Sedona', 'Tusayan', 'Valle'],
+  co: ['Estes Park'],
+  tn: ['Pigeon Forge', 'Townsend'],
+  me: ['Bar Harbor'],
+  sd: ['Custer']
+};
+
+const citiesList = Object.keys(citiesMap).length > 0
+  ? Object.keys(citiesMap).map(cityName => {
+      const cityListings = citiesMap[cityName];
+      return {
+        name: cityName,
+        slug: cityName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        count: cityListings.length
+      };
+    })
+  : (defaultCities[stateCode.toLowerCase()] || []).map(cityName => ({
+      name: cityName,
+      slug: cityName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      count: 0
+    }));
+
+// Breadcrumbs
+const breadcrumbItems = [
+  { name: stateName }
+];
+---
+
+<Layout
+  title={`RV Parks & Campgrounds with verified Cell Signal in ${stateName}`}
+  description={`Find RV campsites and campgrounds with verified Verizon, T-Mobile, and AT&T coverage in ${stateName} by selecting a city.`}
+>
+  <div class="state-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="state-header animate-fade-in">
+        <h1>RV Campgrounds in {stateName}</h1>
+        <p class="lead">Select a city below to view local RV park profiles, check verified cell signal reports, and review nomad amenities.</p>
+      </div>
+      
+      <div class="grid grid-3">
+        {citiesList.map(city => (
+          <div class="city-card">
+            <h3>{city.name}</h3>
+            <div class="city-meta">
+              <span class="city-listing-count">{city.count} {city.count === 1 ? 'verified campground' : 'verified campgrounds'}</span>
+            </div>
+            <a href={`/${stateCode}/${city.slug}`} class="btn btn-outline city-btn">Browse {city.name}</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .state-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .state-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 800px;
+  }
+
+  .city-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: var(--transition);
+  }
+
+  .city-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+  }
+
+  .city-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+  }
+
+  .city-meta {
+    margin-bottom: var(--space-lg);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .city-btn {
+    margin-top: auto;
+    width: 100%;
+    text-align: center;
+  }
+</style>

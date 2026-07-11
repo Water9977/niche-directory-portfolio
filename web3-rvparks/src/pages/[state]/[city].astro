@@ -1,0 +1,217 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import Card from '../../components/Card.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import FAQ from '../../components/FAQ.astro';
+
+export async function getStaticPaths() {
+  const paths = listings.map(item => {
+    return {
+      params: {
+        state: item.state.toLowerCase(),
+        city: item.city.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      },
+      props: {
+        cityName: item.city,
+        stateCode: item.state
+      }
+    };
+  });
+  
+  if (paths.length === 0) {
+    return [
+      { params: { state: 'mt', city: 'west-glacier' }, props: { cityName: 'West Glacier', stateCode: 'mt' } },
+      { params: { state: 'ut', city: 'moab' }, props: { cityName: 'Moab', stateCode: 'ut' } },
+      { params: { state: 'az', city: 'sedona' }, props: { cityName: 'Sedona', stateCode: 'az' } }
+    ];
+  }
+  
+  const uniquePaths = Array.from(new Set(paths.map(p => JSON.stringify(p)))).map(s => JSON.parse(s));
+  return uniquePaths;
+}
+
+const { cityName, stateCode } = Astro.props;
+
+// Filter listings
+const cityListings = listings.filter(
+  l => l.city.toLowerCase() === cityName.toLowerCase() && l.state.toLowerCase() === stateCode.toLowerCase()
+);
+
+const stateNames: Record<string, string> = {
+  mt: 'Montana',
+  ut: 'Utah',
+  az: 'Arizona',
+  co: 'Colorado',
+  tn: 'Tennessee',
+  me: 'Maine',
+  sd: 'South Dakota'
+};
+const stateName = stateNames[stateCode.toLowerCase()] || stateCode.toUpperCase();
+
+// Breadcrumbs
+const breadcrumbItems = [
+  { name: stateName, url: `/${stateCode.toLowerCase()}` },
+  { name: cityName }
+];
+
+const faqItems = [
+  {
+    question: `Which mobile carriers have the best coverage in ${cityName}?`,
+    answer: `Cellular performance varies. In our signal audits for ${cityName}, carrier coverage depends heavily on topography. Gateway locations closer to canyon walls or deep forests experience signal drop, making cellular booster gear or Starlink highly recommended.`
+  },
+  {
+    question: `Are there campgrounds with strong Wi-Fi for remote work in ${cityName}, ${stateCode.toUpperCase()}?`,
+    answer: `Yes, multiple private resorts in the area offer dedicated fiber connections at their clubhouses. Review our comparison tables to see verified speeds at each local RV park.`
+  }
+];
+---
+
+<Layout
+  title={`RV Campgrounds in ${cityName}, ${stateCode.toUpperCase()} with Cell Signal Audits`}
+  description={`Compare Verizon, T-Mobile, and AT&T signal bars, Wi-Fi speeds, and nightly rates for RV campgrounds in ${cityName}, ${stateCode.toUpperCase()}.`}
+>
+  <div class="city-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="city-header animate-fade-in">
+        <h1>RV Park Cell Signal & Wi-Fi Audits in {cityName}, {stateName}</h1>
+        <p class="lead">Compare local RV park internet access, cellular signal strengths, and remote worker amenities in {cityName}.</p>
+      </div>
+
+      <div class="city-content-grid">
+        <div class="listings-column">
+          <div class="section-heading">
+            <h2>Campgrounds & RV Resorts</h2>
+          </div>
+          
+          {cityListings.length > 0 ? (
+            <div class="cards-list">
+              {cityListings.map(item => (
+                <Card
+                  slug={item.slug}
+                  displayName={item.displayName}
+                  city={item.city}
+                  state={item.state}
+                  rating={item.rating}
+                  pricingMin={item.pricingMin}
+                  pricingPeriod={item.pricingPeriod}
+                  pricingNote={item.pricingNote}
+                  verizonSignal={item.nicheFields.verizonSignal}
+                  tmobileSignal={item.nicheFields.tmobileSignal}
+                  attSignal={item.nicheFields.attSignal}
+                  wifiAvailable={item.nicheFields.wifiAvailable}
+                  maxRvLengthFt={item.nicheFields.maxRvLengthFt}
+                />
+              ))}
+            </div>
+          ) : (
+            <div class="no-listings-card">
+              <h4>No listings enriched yet</h4>
+              <p>We are currently gathering carrier signal reports and Wi-Fi speed logs in {cityName}. Use the inquiry form on the right to verify connectivity features directly.</p>
+            </div>
+          )}
+
+          {cityListings.length > 0 && (
+            <>
+              <div class="section-heading mt-xl">
+                <h2>Side-by-Side Signal Quality</h2>
+                <p>Direct comparison of cell bars, Wi-Fi availability, and nightly rates.</p>
+              </div>
+              <ComparisonTable listings={cityListings} />
+            </>
+          )}
+
+          <div class="section-heading mt-xl">
+            <h2>Frequently Asked Questions in {cityName}</h2>
+          </div>
+          <FAQ items={faqItems} />
+        </div>
+
+        <div class="sidebar-column">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .city-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .city-header h1 {
+    font-size: 2.4rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 800px;
+  }
+
+  .city-content-grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .city-content-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .section-heading {
+    margin-bottom: var(--space-md);
+  }
+
+  .section-heading h2 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: var(--space-xs);
+  }
+
+  .section-heading p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .no-listings-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-xl);
+  }
+
+  .no-listings-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+    color: var(--primary);
+  }
+
+  .no-listings-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .mt-xl {
+    margin-top: var(--space-2xl);
+  }
+</style>

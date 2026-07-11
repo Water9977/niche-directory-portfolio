@@ -1,0 +1,179 @@
+---
+interface Listing {
+  slug: string;
+  displayName: string;
+  rating: number | null;
+  pricingMin: number | null;
+  pricingPeriod: string;
+  nicheFields: {
+    verizonSignal: string | null;
+    tmobileSignal: string | null;
+    attSignal: string | null;
+    wifiAvailable: boolean;
+    wifiSpeedMbps: number | null;
+  };
+}
+
+interface Props {
+  listings: Listing[];
+}
+
+const { listings } = Astro.props;
+
+const formatCost = (cost: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(cost);
+};
+---
+
+<div class="table-container">
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Park Name</th>
+        <th>Nightly Fee</th>
+        <th>Rating</th>
+        <th>Verizon</th>
+        <th>T-Mobile</th>
+        <th>AT&T</th>
+        <th>Wi-Fi Speed</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {listings.map((item) => (
+        <tr>
+          <td class="col-name">
+            <strong><a href={`/facilities/${item.slug}`}>{item.displayName}</a></strong>
+          </td>
+          <td class="col-cost">
+            {item.pricingMin ? `${formatCost(item.pricingMin)}/${item.pricingPeriod}` : 'Call for rates'}
+          </td>
+          <td class="col-rating">
+            {item.rating ? (
+              <span class="rating-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+                {item.rating.toFixed(1)}
+              </span>
+            ) : (
+              '--'
+            )}
+          </td>
+          <td class="col-signal">
+            <span class={`sig-label sig-${item.nicheFields.verizonSignal || 'none'}`}>
+              {item.nicheFields.verizonSignal || 'unknown'}
+            </span>
+          </td>
+          <td class="col-signal">
+            <span class={`sig-label sig-${item.nicheFields.tmobileSignal || 'none'}`}>
+              {item.nicheFields.tmobileSignal || 'unknown'}
+            </span>
+          </td>
+          <td class="col-signal">
+            <span class={`sig-label sig-${item.nicheFields.attSignal || 'none'}`}>
+              {item.nicheFields.attSignal || 'unknown'}
+            </span>
+          </td>
+          <td class="col-wifi">
+            {item.nicheFields.wifiAvailable ? (
+              item.nicheFields.wifiSpeedMbps ? `${item.nicheFields.wifiSpeedMbps} Mbps` : 'Yes (Speed Unreported)'
+            ) : (
+              'No'
+            )}
+          </td>
+          <td class="col-action">
+            <a href={`/facilities/${item.slug}`} class="btn btn-primary btn-sm">Report</a>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    background-color: var(--bg-card);
+    margin-bottom: var(--space-xl);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  .comparison-table th {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    padding: var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .comparison-table td {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .comparison-table tr:hover td {
+    background-color: var(--primary-light);
+  }
+
+  .col-name a {
+    color: var(--text-main);
+  }
+
+  .col-name a:hover {
+    color: var(--primary);
+  }
+
+  .col-cost {
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .rating-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: hsl(38, 90%, 95%);
+    color: hsl(38, 90%, 35%);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .sig-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+  }
+
+  .sig-strong { color: var(--success); }
+  .sig-medium { color: var(--accent); }
+  .sig-weak { color: #e53e3e; }
+  .sig-none { color: var(--text-muted); }
+
+  .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+</style>

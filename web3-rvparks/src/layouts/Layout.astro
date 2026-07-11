@@ -1,0 +1,97 @@
+---
+import '../styles/index.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  schemaMarkup?: string;
+}
+
+const { title, description, canonicalUrl, schemaMarkup } = Astro.props;
+
+const siteUrl = "https://campconnected.directory";
+const currentUrl = canonicalUrl || siteUrl;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <link rel="canonical" href={currentUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={currentUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content="/images/og-image.jpg" />
+
+    {schemaMarkup && (
+      <script type="application/ld+json" set:html={schemaMarkup}></script>
+    )}
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="container navbar-container">
+        <a href="/" class="logo">
+          Camp<span>Connected</span>
+        </a>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/mt/west-glacier" class="nav-link">West Glacier, MT</a></li>
+            <li><a href="/ut/moab" class="nav-link">Moab, UT</a></li>
+            <li><a href="/az/sedona" class="nav-link">Sedona, AZ</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3>CampConnected</h3>
+            <p>Empowering remote workers, RV digital nomads, and campers with verified carrier cell signals, Starlink support, and Wi-Fi speeds.</p>
+          </div>
+          <div class="footer-nav">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="/mt/west-glacier">West Glacier RV Parks</a></li>
+              <li><a href="/ut/moab">Moab Campgrounds</a></li>
+              <li><a href="/az/sedona">Sedona Signal Reports</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav">
+            <h4>Nomad Info</h4>
+            <ul>
+              <li><a href="/#about">Signal Auditing</a></li>
+              <li><a href="/#faq">Nomad Gear</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {new Date().getFullYear()} CampConnected. All rights reserved.</p>
+          <p>Verified Cell Signal RV Directories</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

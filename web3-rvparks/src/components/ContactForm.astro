@@ -1,0 +1,149 @@
+---
+interface Props {
+  facilityName?: string;
+}
+
+const { facilityName } = Astro.props;
+---
+
+<div class="contact-form-container">
+  <div class="form-header">
+    <h3>Check Signal & Availability</h3>
+    <p>Ask questions about signal boosters, site dimensions, or reservation dates at {facilityName || 'this campground'}.</p>
+  </div>
+  
+  <form class="contact-form" action="#" method="POST" id="leadForm">
+    {facilityName && (
+      <input type="hidden" name="campground" value={facilityName} />
+    )}
+    
+    <div class="form-group">
+      <label for="name">Your Name *</label>
+      <input type="text" id="name" name="name" required placeholder="John Nomad" />
+    </div>
+
+    <div class="form-group mt-sm-row">
+      <div class="half-width">
+        <label for="phone">Phone *</label>
+        <input type="tel" id="phone" name="phone" required placeholder="(555) 555-5555" />
+      </div>
+      <div class="half-width">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required placeholder="john@workfromrv.com" />
+      </div>
+    </div>
+
+    <div class="form-group mt-sm-row">
+      <div class="half-width">
+        <label for="rvLength">RV Length (feet) *</label>
+        <input type="number" id="rvLength" name="rvLength" required min="10" max="50" placeholder="e.g. 32" />
+      </div>
+      <div class="half-width">
+        <label for="arrivalDate">Arrival Date *</label>
+        <input type="date" id="arrivalDate" name="arrivalDate" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="connectivityNeeds">Connectivity Requirement</label>
+      <select id="connectivity" name="connectivity">
+        <option value="starlink">Starlink-friendly (No tree blockage)</option>
+        <option value="boosted">Cell signal booster on-site (WeBoost)</option>
+        <option value="wifi">Strong park Wi-Fi (Zoom call capability)</option>
+        <option value="basic">Basic connectivity is fine</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="message">Additional questions (e.g., pet restrictions, 50A hookups)</label>
+      <textarea id="message" name="message" rows="3" placeholder="Let them know if you require specific pull-through sites, 50 Amp service, or have multiple pets."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-submit">Check Availability</button>
+  </form>
+</div>
+
+<style>
+  .contact-form-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 90px;
+  }
+
+  .form-header {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .form-header h3 {
+    color: #ffffff;
+    font-size: 1.15rem;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .form-header p {
+    color: var(--primary-light);
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
+
+  .contact-form {
+    padding: var(--space-lg);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-md);
+  }
+
+  .mt-sm-row {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .half-width {
+    flex: 1;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.65rem var(--space-sm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    transition: var(--transition);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.85rem;
+    font-size: 1rem;
+    margin-top: var(--space-xs);
+  }
+</style>

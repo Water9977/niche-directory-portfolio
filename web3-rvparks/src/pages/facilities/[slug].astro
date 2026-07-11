@@ -1,0 +1,429 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import PricingCard from '../../components/PricingCard.astro';
+import AmenityBadges from '../../components/AmenityBadges.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import MapEmbed from '../../components/MapEmbed.astro';
+
+export async function getStaticPaths() {
+  if (listings.length === 0) {
+    return [
+      {
+        params: { slug: 'sample-rv-park' },
+        props: {
+          listing: {
+            slug: 'sample-rv-park',
+            displayName: 'Sample RV Resort',
+            city: 'Moab',
+            state: 'UT',
+            zipCode: '84532',
+            fullAddress: 'Moab, UT 84532',
+            latitude: null,
+            longitude: null,
+            phone: '(555) 555-5555',
+            website: 'https://example.com',
+            rating: 4.6,
+            reviewsCount: 22,
+            pricingMin: 65,
+            pricingMax: 110,
+            pricingPeriod: 'night',
+            pricingNote: 'Prices vary by season and site size',
+            amenities: ['Full Hookups', 'Pull-through Sites', 'Swimming Pool', 'Dog Park', 'Shower Facilities'],
+            aiSummary: 'A modern, nomad-friendly RV resort with excellent Starlink clearance and high-speed Wi-Fi throughout the park.',
+            aiPros: ['Verizon 5G ultra wideband', 'Clear northern sky for Starlink'],
+            aiCons: ['AT&T signal drops near canyon areas'],
+            sourceSnippet: 'Starlink-friendly campsites starting at $65',
+            nicheFields: {
+              verizonSignal: 'strong',
+              tmobileSignal: 'medium',
+              attSignal: 'weak',
+              wifiAvailable: true,
+              wifiSpeedMbps: 85,
+              starlinkFriendly: true,
+              maxRvLengthFt: 45,
+              hasFullHookups: true
+            },
+            lastVerified: '2026-07-11 12:00:00'
+          }
+        }
+      }
+    ];
+  }
+  
+  return listings.map(item => {
+    return {
+      params: { slug: item.slug },
+      props: { listing: item }
+    };
+  });
+}
+
+const { listing } = Astro.props;
+
+const stateNames: Record<string, string> = {
+  mt: 'Montana',
+  ut: 'Utah',
+  az: 'Arizona',
+  co: 'Colorado',
+  tn: 'Tennessee',
+  me: 'Maine',
+  sd: 'South Dakota'
+};
+const stateName = stateNames[listing.state.toLowerCase()] || listing.state.toUpperCase();
+
+const breadcrumbItems = [
+  { name: stateName, url: `/${listing.state.toLowerCase()}` },
+  { name: listing.city, url: `/${listing.state.toLowerCase()}/${listing.city.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` },
+  { name: listing.displayName }
+];
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "RVPark",
+  "name": listing.displayName,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": listing.city,
+    "addressRegion": listing.state,
+    "postalCode": listing.zipCode || ""
+  },
+  "telephone": listing.phone || "",
+  "url": listing.website || "",
+  "aggregateRating": listing.rating ? {
+    "@type": "AggregateRating",
+    "ratingValue": listing.rating,
+    "reviewCount": listing.reviewsCount || 1
+  } : undefined,
+  "priceRange": listing.pricingMin ? `$${listing.pricingMin}-$${listing.pricingMax || listing.pricingMin}` : "Call for rates"
+});
+---
+
+<Layout
+  title={`${listing.displayName} – Cell Signal & RV Sites in ${listing.city}, ${listing.state.toUpperCase()}`}
+  description={`Verizon/T-Mobile signal reports, Wi-Fi speed tests, and specifications for ${listing.displayName} in ${listing.city}, ${listing.state.toUpperCase()}.`}
+  schemaMarkup={schema}
+>
+  <div class="facility-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="profile-layout animate-fade-in">
+        <div class="profile-main">
+          <div class="profile-header">
+            <span class="location-tag">{listing.city}, {stateName}</span>
+            <h1>{listing.displayName}</h1>
+            
+            {listing.rating && (
+              <div class="rating-display">
+                <span class="stars">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
+                </span>
+                <span class="rating-val"><strong>{listing.rating.toFixed(1)}</strong> ({listing.reviewsCount} reviews)</span>
+              </div>
+            )}
+          </div>
+
+          <PricingCard
+            pricingMin={listing.pricingMin}
+            pricingMax={listing.pricingMax}
+            pricingPeriod={listing.pricingPeriod}
+            pricingNote={listing.pricingNote}
+            sourceSnippet={listing.sourceSnippet}
+          />
+
+          <div class="profile-section">
+            <h2>Nomad Internet & Signal Summary</h2>
+            <p class="summary-text">{listing.aiSummary}</p>
+            
+            <div class="pros-cons-grid">
+              {listing.aiPros && listing.aiPros.length > 0 && (
+                <div class="pros-box">
+                  <h4>Connectivity Pros</h4>
+                  <ul>
+                    {listing.aiPros.map((pro: string) => (
+                      <li>{pro}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {listing.aiCons && listing.aiCons.length > 0 && (
+                <div class="cons-box">
+                  <h4>Connectivity Cons</h4>
+                  <ul>
+                    {listing.aiCons.map((con: string) => (
+                      <li>{con}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2>Verified Connectivity Audits</h2>
+            <div class="features-grid">
+              <div class="feature-item">
+                <span class="feature-label">Verizon Signal:</span>
+                <span class={`val-yes sig-${listing.nicheFields.verizonSignal || 'none'}`}>
+                  {listing.nicheFields.verizonSignal ? `${listing.nicheFields.verizonSignal.toUpperCase()}` : 'No report'}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">T-Mobile Signal:</span>
+                <span class={`val-yes sig-${listing.nicheFields.tmobileSignal || 'none'}`}>
+                  {listing.nicheFields.tmobileSignal ? `${listing.nicheFields.tmobileSignal.toUpperCase()}` : 'No report'}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">AT&T Signal:</span>
+                <span class={`val-yes sig-${listing.nicheFields.attSignal || 'none'}`}>
+                  {listing.nicheFields.attSignal ? `${listing.nicheFields.attSignal.toUpperCase()}` : 'No report'}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Campground Wi-Fi speed:</span>
+                <span class="val-ratio">
+                  {listing.nicheFields.wifiAvailable ? (
+                    listing.nicheFields.wifiSpeedMbps ? `${listing.nicheFields.wifiSpeedMbps} Mbps` : 'Available (Speed Unmeasured)'
+                  ) : (
+                    'No Public Wi-Fi'
+                  )}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Starlink Clear Sky:</span>
+                <span class={listing.nicheFields.starlinkFriendly ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.starlinkFriendly ? "Yes (Good clearance)" : "No / Heavy tree cover"}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Max RV Length:</span>
+                <span class="val-ratio">{listing.nicheFields.maxRvLengthFt ? `${listing.nicheFields.maxRvLengthFt} Feet` : "Varies"}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2>Campground Amenities</h2>
+            <AmenityBadges amenities={listing.amenities} />
+          </div>
+
+          {listing.fullAddress && (
+            <div class="profile-section">
+              <h2>Campground Location</h2>
+              <p class="address-text">{listing.fullAddress}</p>
+              <MapEmbed address={listing.fullAddress} />
+            </div>
+          )}
+          
+          <div class="profile-section source-website">
+            <p>Visit their website for booking requests: <a href={listing.website} target="_blank" rel="noopener noreferrer">{listing.website}</a></p>
+          </div>
+        </div>
+
+        <div class="profile-sidebar">
+          <ContactForm facilityName={listing.displayName} />
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .profile-layout {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .profile-layout {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .profile-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .location-tag {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .profile-header h1 {
+    font-size: 2.5rem;
+    margin-top: var(--space-2xs);
+    margin-bottom: var(--space-xs);
+  }
+
+  .rating-display {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 1rem;
+  }
+
+  .stars {
+    color: var(--accent);
+    display: inline-flex;
+  }
+
+  .rating-val {
+    color: var(--text-muted);
+  }
+
+  .profile-section {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .profile-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: var(--space-xs);
+  }
+
+  .summary-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+  }
+
+  .pros-cons-grid {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 600px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .pros-box h4,
+  .cons-box h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+  }
+
+  .pros-box h4 { color: var(--primary); }
+  .cons-box h4 { color: var(--text-muted); }
+
+  .pros-box ul,
+  .cons-box ul {
+    list-style: none;
+  }
+
+  .pros-box li,
+  .cons-box li {
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xs);
+    position: relative;
+    padding-left: var(--space-lg);
+    line-height: 1.4;
+  }
+
+  .pros-box li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .cons-box li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 1.2rem;
+    top: -2px;
+  }
+
+  .features-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 600px) {
+    .features-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    background-color: var(--secondary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .feature-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .val-yes {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 2px;
+  }
+
+  .val-no {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .val-ratio {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+
+  .sig-strong { color: var(--success); }
+  .sig-medium { color: var(--accent); }
+  .sig-weak { color: #e53e3e; }
+  .sig-none { color: var(--text-muted); }
+
+  .address-text {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+
+  .source-website {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,267 @@
+[
+  {
+    "slug": "glacier-campground-west-glacier-mt",
+    "displayName": "Glacier Campground",
+    "city": "West Glacier",
+    "state": "MT",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://campgrounds.rvlife.com/regions/montana/west-glacier/glacier-campground-1703",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 74.0,
+    "pricingMax": 90.0,
+    "pricingPeriod": "nightly",
+    "pricingNote": "based on recent visitor reviews",
+    "amenities": [
+      "restrooms",
+      "showers",
+      "propane",
+      "cafe",
+      "dump_station",
+      "pull_thru_sites"
+    ],
+    "aiSummary": "Glacier Campground offers shady, forested sites just outside the west entrance to Glacier National Park. Visitors highly appreciate the convenient location and the delicious food at the on-site Sunflower Cafe. However, maneuvering larger rigs can be tight and the site layouts lack full sewer hookups.",
+    "aiPros": [
+      "Excellent proximity to Glacier National Park",
+      "Great on-site Sunflower Cafe",
+      "Private, forested campsites"
+    ],
+    "aiCons": [
+      "No sewer hookups at individual sites",
+      "Tight spaces can make maneuvering larger rigs tricky"
+    ],
+    "sourceSnippet": "Limited amenities—no sewer at sites, older restrooms, and mostly 30-amp service—are outweighed by the excellent location for park access and a cozy community vibe.",
+    "nicheFields": {
+      "verizonSignal": null,
+      "tmobileSignal": null,
+      "attSignal": null,
+      "wifiAvailable": true,
+      "wifiSpeedMbps": 47.94,
+      "hookupsAvailable": [
+        "water_electric"
+      ],
+      "nightlyRate": 80.0,
+      "petFriendly": true,
+      "coworkingSpace": false,
+      "maxRvLengthFt": null
+    },
+    "lastVerified": "2026-07-11 16:00:26"
+  },
+  {
+    "slug": "accommodations-west-glacier-mt",
+    "displayName": "ACCOMMODATIONS",
+    "city": "West Glacier",
+    "state": "MT",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.glaciercampground.com/glacier-campground-accommodations-tent-cabin-rv-trailers-rooftop-tents/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 20.0,
+    "pricingMax": 120.0,
+    "pricingPeriod": "nightly",
+    "pricingNote": "Rates vary by accommodation size and season. Military, Police, and Firefighter discounts available.",
+    "amenities": [
+      "laundry",
+      "dump_station",
+      "propane",
+      "store",
+      "playground",
+      "cafe",
+      "bathhouse"
+    ],
+    "aiSummary": "Glacier Campground offers wooded accommodations including RV sites, tent sites, and rustic cabins near Glacier National Park. The heavily wooded campground provides water and electric hookups for RVs under 32 feet, with an on-site dump station and a cafe. Due to the dense tree canopy, personal satellite and Starlink setups do not perform well, but Wi-Fi is available around the office patio and cafe.",
+    "aiPros": [
+      "On-site cafe (Sunflower Cafe) open for breakfast, lunch, and dinner",
+      "Wooded, natural and tranquil setting close to Glacier National Park",
+      "Discounts available for military, police officers, and firefighters"
+    ],
+    "aiCons": [
+      "No full hookups (water and electric only; no sewer at sites)",
+      "Personal Starlink/satellite setups do not work well due to heavy tree cover"
+    ],
+    "sourceSnippet": "WIFI is available around the office patio area and at the cafe ONLY, it is NOT available at campsites. While our provided WIFI has a great connection, personal Starlink/Satellite Internet setups don’t work that well due to our heavily wooded campground.",
+    "nicheFields": {
+      "verizonSignal": null,
+      "tmobileSignal": null,
+      "attSignal": null,
+      "wifiAvailable": true,
+      "wifiSpeedMbps": null,
+      "hookupsAvailable": [
+        "water_electric"
+      ],
+      "nightlyRate": 20.0,
+      "petFriendly": true,
+      "coworkingSpace": false,
+      "maxRvLengthFt": 32
+    },
+    "lastVerified": "2026-07-11 16:00:33"
+  },
+  {
+    "slug": "moose-creek-rv-resort-and-bed-breakfast-west-glacier-mt",
+    "displayName": "Moose Creek RV Resort and Bed & Breakfast",
+    "city": "West Glacier",
+    "state": "MT",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.parkadvisor.com/us/montana/west+glacier/1000387/Moose+Creek+RV+Resort+and+Bed+and+Breakfast",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 90.0,
+    "pricingMax": 100.0,
+    "pricingPeriod": "nightly",
+    "pricingNote": null,
+    "amenities": [
+      "restrooms",
+      "showers",
+      "dog_run",
+      "breakfast"
+    ],
+    "aiSummary": "Moose Creek RV Resort and Bed & Breakfast is located in West Glacier, Montana, just minutes from the West Glacier entrance to Glacier National Park. The resort features a mix of full hookup paved sites and 30-amp water-and-electric gravel sites tucked into a forested setting. While guests love the location and daily fresh-baked goods, several reviews note tight site spacing and persistent noise from the nearby highway and train tracks.",
+    "aiPros": [
+      "Excellent proximity to Glacier National Park",
+      "Friendly staff and great breakfast/baked goods",
+      "Clean bathrooms and showers"
+    ],
+    "aiCons": [
+      "Noisy highway and train traffic",
+      "Tight campsites with little privacy"
+    ],
+    "sourceSnippet": "Great campground. Remember why you are here. Glacier! Here to sight see and hike Glacier NP. Wifi works great.",
+    "nicheFields": {
+      "verizonSignal": null,
+      "tmobileSignal": null,
+      "attSignal": null,
+      "wifiAvailable": true,
+      "wifiSpeedMbps": null,
+      "hookupsAvailable": [
+        "full_hookup",
+        "water_electric"
+      ],
+      "nightlyRate": 90.0,
+      "petFriendly": true,
+      "coworkingSpace": false,
+      "maxRvLengthFt": 40
+    },
+    "lastVerified": "2026-07-11 16:00:57"
+  },
+  {
+    "slug": "west-glacier-rv-park-west-glacier-mt",
+    "displayName": "West Glacier RV Park",
+    "city": "West Glacier",
+    "state": "MT",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://westglacierrvandcabins.com/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "nightly",
+    "pricingNote": "5th night free or a $100 gas certificate on qualifying stays",
+    "amenities": [
+      "laundry",
+      "dog_park",
+      "showers",
+      "playground",
+      "propane",
+      "store",
+      "wifi"
+    ],
+    "aiSummary": "West Glacier RV Park is a hidden gem quietly tucked behind the bustle of West Glacier Village, just steps away from Glacier National Park. The park offers full-service, pull-through, pet-friendly RV sites equipped with 50 Amp power, full hookups, and fire pits. Guests can enjoy convenient amenities like free Wi-Fi, a dog park, coin laundry, and short walking paths to nearby village dining and shopping.",
+    "aiPros": [
+      "Steps from the West Glacier entrance of Glacier National Park",
+      "Paved roads and level, gravel pull-through sites",
+      "Short walking distance to West Glacier Village dining, shops, and grocery"
+    ],
+    "aiCons": [
+      "A little on the pricier side according to guest reviews",
+      "Tent camping is not permitted"
+    ],
+    "sourceSnippet": "Convenient amenities including free Wi-Fi, coin-operated laundry, dog park and modern restroom and shower facilities.",
+    "nicheFields": {
+      "verizonSignal": null,
+      "tmobileSignal": null,
+      "attSignal": null,
+      "wifiAvailable": true,
+      "wifiSpeedMbps": null,
+      "hookupsAvailable": [
+        "full_hookup"
+      ],
+      "nightlyRate": null,
+      "petFriendly": true,
+      "coworkingSpace": false,
+      "maxRvLengthFt": null
+    },
+    "lastVerified": "2026-07-11 16:01:48"
+  },
+  {
+    "slug": "northamericanrvpark-west-glacier-mt",
+    "displayName": "Northamericanrvpark",
+    "city": "West Glacier",
+    "state": "MT",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.northamericanrvpark.com/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "nightly",
+    "pricingNote": "We Honor 10% Discounts on Nightly Rates to Members of the following: Military, Veterans, Law Enforcement, Firefighters, EMTs, FMCA and AAA",
+    "amenities": [
+      "showers",
+      "laundry",
+      "dog_park",
+      "playground",
+      "sports_courts",
+      "rv_supplies",
+      "giftshop",
+      "ice",
+      "firewood",
+      "clubhouse",
+      "pool_table"
+    ],
+    "aiSummary": "North American RV Park & Yurt Village is a big-rig friendly campground located just 5 miles from Glacier National Park's West Entrance in Coram, Montana. It offers 108 RV sites with 30/50amp service, water, and sewer hookups, alongside yurts and camping cabins. Guests can enjoy free wireless internet, a large dog park, and an array of recreational facilities including a 24/7 guest lounge.",
+    "aiPros": [
+      "Only 5.5 miles from the West Entrance of Glacier National Park",
+      "Big-rig friendly with 30/50amp, water, and sewer hookups",
+      "Free wireless internet available to all sites"
+    ],
+    "aiCons": [
+      "Seasonal operations only (May 1st - September 30th)"
+    ],
+    "sourceSnippet": "» Free Wireless Internet (Wi-Fi) to All Sites «",
+    "nicheFields": {
+      "verizonSignal": null,
+      "tmobileSignal": null,
+      "attSignal": null,
+      "wifiAvailable": true,
+      "wifiSpeedMbps": null,
+      "hookupsAvailable": [
+        "full_hookup"
+      ],
+      "nightlyRate": null,
+      "petFriendly": true,
+      "coworkingSpace": false,
+      "maxRvLengthFt": null
+    },
+    "lastVerified": "2026-07-11 16:02:14"
+  }
+]
