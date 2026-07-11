@@ -34,8 +34,10 @@ Desktop.ini
 *.log
 npm-debug.log*
 
-# Antigravity / Gemini agent state (keep .agents/, exclude runtime)
+# Antigravity / Gemini agent state (keep local rules/state excluded)
 .gemini/
+.agents/
+
 
 # Python
 __pycache__/
