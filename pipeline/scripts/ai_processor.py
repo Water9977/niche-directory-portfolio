@@ -166,12 +166,24 @@ def process_enrichment(limit=5):
             
         prompt = prompt_template + f"\nWebpage content:\n---\n{markdown}\n---"
         
+        # Define model fallback rotation list
+        model_list = [
+            "gemini-3.1-flash-lite",
+            "gemini-3.5-flash",
+            "gemini-3-flash-preview",
+            "gemini-2.5-flash"
+        ]
+        
         response = None
-        max_retries = 4
+        max_retries = 5
+        current_model_idx = 0
+        
         for attempt in range(max_retries):
+            model_name = model_list[current_model_idx]
             try:
+                print(f"Calling Gemini API using model '{model_name}'...")
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model=model_name,
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         response_mime_type="application/json",
@@ -179,26 +191,44 @@ def process_enrichment(limit=5):
                         thinking_config=types.ThinkingConfig(thinking_budget=1024)
                     )
                 )
-                break
+                if response:
+                    break
             except Exception as e:
                 err_msg = str(e).upper()
-                if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg or "LIMIT" in err_msg:
-                    sleep_time = 15 * (attempt + 1)
-                    match = re.search(r"retry in ([\d\.]+)s", str(e), re.IGNORECASE)
-                    if match:
-                        sleep_time = float(match.group(1)) + 1.5
-                    print(f"Rate limit hit: {e}. Retrying in {sleep_time:.2f} seconds... (Attempt {attempt+1}/{max_retries})")
-                    time.sleep(sleep_time)
+                is_rate_limit = "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg or "LIMIT" in err_msg or "503" in err_msg or "UNAVAILABLE" in err_msg
+                
+                if is_rate_limit:
+                    next_idx = (current_model_idx + 1) % len(model_list)
+                    next_model = model_list[next_idx]
+                    print(f"Rate limit or 503 hit on '{model_name}': {e}")
+                    print(f"Switching model to '{next_model}'... (Attempt {attempt+1}/{max_retries})")
+                    current_model_idx = next_idx
+                    time.sleep(2)
                 else:
-                    print(f"API Error: {e}")
-                    break
+                    print(f"API Error on '{model_name}': {e}")
+                    current_model_idx = (current_model_idx + 1) % len(model_list)
+                    time.sleep(2)
                     
         if not response:
-            print(f"Failed to enrich {name} due to rate limits or API errors.")
+            print(f"Failed to enrich {name} due to rate limits or API errors after rotating models.")
             continue
             
         try:
-            raw_text = response.text
+            # Safe text extraction (handling case where response.text is None for some models)
+            raw_text = ""
+            if response.text:
+                raw_text = response.text
+            else:
+                try:
+                    parts = response.candidates[0].content.parts
+                    raw_text = "\n".join(part.text for part in parts if hasattr(part, 'text') and part.text)
+                except Exception as part_err:
+                    print(f"Error parsing candidates parts: {part_err}")
+            
+            if not raw_text:
+                print(f"Failed to extract text response for {name}.")
+                continue
+                
             clean_text = clean_json_response(raw_text)
             data = json.loads(clean_text)
             

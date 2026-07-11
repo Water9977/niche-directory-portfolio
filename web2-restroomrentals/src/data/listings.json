@@ -1284,5 +1284,514 @@
       "hasFlushingToilets": true
     },
     "lastVerified": "2026-07-11 16:46:50"
+  },
+  {
+    "slug": "richardson-tx-portable-toilet-rentals-richardson-tx",
+    "displayName": "Richardson, TX Portable Toilet Rentals",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.asapmarketplace.com/locations/tx/dallas-county-tx/richardson/porta-potty-rentals/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 115.0,
+    "pricingMax": 300.0,
+    "pricingPeriod": "per_event",
+    "pricingNote": "Construction pricing is for a 28-day period with 1x/week service; Event rental is for a single day weekend event.",
+    "amenities": [
+      "sinks",
+      "hand sanitizer stations",
+      "ADA-compliant units"
+    ],
+    "aiSummary": "ASAP Marketplace provides a comprehensive selection of portable sanitation solutions in Richardson, TX, connecting customers with pre-vetted local providers for both construction projects and events. They offer a variety of unit types, including standard, flushable, and ADA-compliant options with transparent pricing for different service durations.",
+    "aiPros": [
+      "Wide selection of portable sanitation units",
+      "Pre-vetted local rental providers",
+      "Emergency service and reliable customer support"
+    ],
+    "aiCons": [
+      "Pricing varies significantly based on rental duration",
+      "Specific trailer amenities are not detailed in the online catalog"
+    ],
+    "sourceSnippet": "On average a 28-day rental for portable toilet will typically range from $161 to $240 per 28-days.",
+    "nicheFields": {
+      "stallsCount": 10,
+      "climateControlled": false,
+      "adaCompliant": true,
+      "rentalPriceEst": 115.0,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "festivals",
+        "construction",
+        "corporate"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:16:49"
+  },
+  {
+    "slug": "richardson-tx-luxury-ada-units-richardson-tx",
+    "displayName": "Richardson, TX Luxury & ADA Units",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://dfportabletoilets.com/tx/richardson/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "per_event",
+    "pricingNote": "Pricing is quote-based; contact for a free consultation.",
+    "amenities": [
+      "hand sanitizer",
+      "vanity mirrors",
+      "coat hooks",
+      "lighting",
+      "running water sinks",
+      "flushing toilets"
+    ],
+    "aiSummary": "D & F Portable Toilets serves the Richardson, TX area by offering a variety of portable restroom solutions, from basic construction units to luxury trailers. They focus on providing expert advice and reliable maintenance to ensure comfort, hygiene, and compliance for both large events and job sites.",
+    "aiPros": [
+      "Diverse selection of unit types",
+      "Reliable maintenance and delivery service",
+      "Expert planning guidance for event organizers"
+    ],
+    "aiCons": [
+      "Pricing is not publicly listed and requires a quote",
+      "No specific delivery radius mentioned"
+    ],
+    "sourceSnippet": "D & F Portable Toilets offers a diverse range of porta potty rentals, from basic units to luxury trailers, to meet your specific needs.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": true,
+      "adaCompliant": true,
+      "rentalPriceEst": null,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "festivals",
+        "construction",
+        "corporate",
+        "parties",
+        "sporting events"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:16:55"
+  },
+  {
+    "slug": "dumpster-rental-porta-potty-rentals-in-richardson-tx-75081-richardson-tx",
+    "displayName": "Dumpster Rental & Porta Potty Rentals in Richardson, TX 75081",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://richardson-tx.jandjdumpstersolutionsllc.com/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 75.0,
+    "pricingMax": 2500.0,
+    "pricingPeriod": "per_event",
+    "pricingNote": "Pricing depends on waste type, rental duration, and delivery location.",
+    "amenities": [
+      "vanity_mirrors",
+      "proper_lighting",
+      "flushing_toilets",
+      "running_water_sinks",
+      "climate_control"
+    ],
+    "aiSummary": "Porta Potty Pros provides comprehensive portable sanitation and waste management solutions in Richardson, TX, and surrounding areas. They offer a diverse range of services, including luxury restroom trailers, construction dumpsters, and OSHA-compliant portable toilets, focusing on reliability and code-compliant maintenance.",
+    "aiPros": [
+      "Same-day delivery options available",
+      "Wide range of unit types and dumpster sizes",
+      "Includes event planning and OSHA-compliant coordination"
+    ],
+    "aiCons": [
+      "Exact pricing varies based on project-specific factors",
+      "Specific delivery radius is not defined in miles"
+    ],
+    "sourceSnippet": "Luxury restroom trailer rental runs $800 to $2,500 per event depending on trailer size and duration.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": true,
+      "adaCompliant": true,
+      "rentalPriceEst": 75.0,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "festivals",
+        "community events",
+        "construction"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:17:01"
+  },
+  {
+    "slug": "porta-potty-richardson-tx",
+    "displayName": "Porta Potty",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.rentnational.com/richardson-tx",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "per_event",
+    "pricingNote": null,
+    "amenities": [
+      "mirrors",
+      "fresh-water faucets",
+      "lighting",
+      "air conditioning"
+    ],
+    "aiSummary": "National Construction Rentals provides a diverse range of temporary site solutions, including portable toilets, luxury restroom trailers, fencing, and storage containers. Their higher-end restroom units are climate-controlled and equipped with various amenities to suit both construction sites and upscale events.",
+    "aiPros": [
+      "Comprehensive range of site services",
+      "Luxury restroom trailers available",
+      "Includes ADA-compliant options"
+    ],
+    "aiCons": [
+      "No pricing details provided",
+      "No specific stall capacity listed"
+    ],
+    "sourceSnippet": "National Construction Rentals’ higher-end units include a host of accessories like mirrors, fresh-water faucets, lighting and air conditioning, perfect for any classy event.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": true,
+      "adaCompliant": true,
+      "rentalPriceEst": null,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "fairs",
+        "festivals",
+        "concerts",
+        "construction",
+        "classy events"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:17:07"
+  },
+  {
+    "slug": "construction-toilets-richardson-tx-richardson-tx",
+    "displayName": "Construction Toilets Richardson TX",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://construction-toilets-richardson-tx.netlify.app/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 85.0,
+    "pricingMax": 275.0,
+    "pricingPeriod": "per_event",
+    "pricingNote": "Hand washing stations are $85/month; pricing listed per month for rentals",
+    "amenities": [
+      "hand sanitizer stations"
+    ],
+    "aiSummary": "Richardson Portable Toilets Rental is a local family-owned business providing construction and event sanitation solutions since 1995. They offer a range of units including standard, deluxe flushable, and ADA-compliant models, supported by weekly maintenance and 24/7 emergency service.",
+    "aiPros": [
+      "Same-day delivery and emergency service",
+      "OSHA-compliant with weekly maintenance",
+      "Established local business since 1995"
+    ],
+    "aiCons": [
+      "Pricing is focused on long-term monthly rentals rather than short-term event daily rates",
+      "Limited amenity information provided"
+    ],
+    "sourceSnippet": "Richardson Portable Toilets Rental delivers clean, reliable construction site portable toilets across Richardson, Plano, and surrounding areas.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": false,
+      "adaCompliant": true,
+      "rentalPriceEst": 85.0,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "festivals",
+        "sports events",
+        "construction"
+      ],
+      "hasRunningWater": false,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:17:11"
+  },
+  {
+    "slug": "construction-dumpsters-sanitation-rentals-in-richardson-tx-richardson-tx",
+    "displayName": "Construction Dumpsters & Sanitation Rentals in Richardson, TX",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://richardson-tx.amdumpsters.com/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "per_event",
+    "pricingNote": null,
+    "amenities": [],
+    "aiSummary": "The requested webpage returned a 404 Not Found error, therefore no service or company information could be extracted.",
+    "aiPros": [],
+    "aiCons": [],
+    "sourceSnippet": null,
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": false,
+      "adaCompliant": false,
+      "rentalPriceEst": null,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [],
+      "hasRunningWater": false,
+      "hasFlushingToilets": false
+    },
+    "lastVerified": "2026-07-11 17:17:15"
+  },
+  {
+    "slug": "richardson-tx-porta-potty-rentals-richardson-tx",
+    "displayName": "Richardson, TX Porta Potty Rentals",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://richardson-tx.spotlessportapottyrentalorlando.com/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 50.0,
+    "pricingMax": 3000.0,
+    "pricingPeriod": "per_event",
+    "pricingNote": "delivery and pickup included in most contracts; final pricing depends on location, debris type, and duration",
+    "amenities": [
+      "vanity_mirrors",
+      "interior_lighting",
+      "soap_dispensers",
+      "paper_towel_holders"
+    ],
+    "aiSummary": "Texas Porta Potty Pros offers professional portable sanitation and dumpster rental services in Richardson, TX, catering to both construction sites and large events. They provide a diverse inventory ranging from standard porta potties to VIP restroom trailers and various dumpster sizes to meet specific site requirements.",
+    "aiPros": [
+      "Transparent pricing",
+      "Includes delivery and pickup in most contracts",
+      "On-time delivery guarantee"
+    ],
+    "aiCons": [
+      "Pricing subject to variable factors like waste type",
+      "Service area coverage limited to specific Texas regions"
+    ],
+    "sourceSnippet": "Standard portable toilet rental for construction or general outdoor use typically runs $100 to $175 per week in Texas, including one scheduled cleaning and waste pump-out.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": false,
+      "adaCompliant": true,
+      "rentalPriceEst": 50.0,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "corporate events",
+        "festivals",
+        "fairs",
+        "outdoor concerts",
+        "sporting events",
+        "community gatherings",
+        "construction"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": false
+    },
+    "lastVerified": "2026-07-11 17:17:26"
+  },
+  {
+    "slug": "portable-toilet-rental-in-richardson-tx-richardson-tx",
+    "displayName": "Portable Toilet Rental in Richardson, TX",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://flushfleetportapotties.com/tx/richardson/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "per_event",
+    "pricingNote": "All-inclusive quotes including delivery, placement, servicing, and pickup with no hidden fees.",
+    "amenities": [
+      "vanity_mirrors",
+      "flushing_toilets",
+      "running_water_sinks",
+      "air_conditioning",
+      "heating",
+      "hand_sanitizer"
+    ],
+    "aiSummary": "Flushfleet Porta Potty provides a diverse range of portable sanitation solutions, from standard toilets to luxury restroom trailers. They serve various sectors including construction and events with an emphasis on hygiene, professional service, and all-inclusive pricing.",
+    "aiPros": [
+      "All-inclusive pricing with no hidden fees",
+      "Flexible rental periods for short and long-term needs",
+      "Offers emergency deployment services"
+    ],
+    "aiCons": [
+      "No specific pricing information provided",
+      "No specific delivery radius stated"
+    ],
+    "sourceSnippet": "Our quotes are all-inclusive. The price covers the rental of the unit, delivery, professional placement, scheduled servicing (for long-term rentals), and final pickup.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": true,
+      "adaCompliant": true,
+      "rentalPriceEst": null,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "festivals",
+        "construction",
+        "corporate",
+        "vip events",
+        "emergency response"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:17:32"
+  },
+  {
+    "slug": "restroom-trailer-rental-texas-richardson-tx",
+    "displayName": "Restroom Trailer Rental Texas",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://restroomtrailertexas.com/restroom-trailers/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "per_event",
+    "pricingNote": null,
+    "amenities": [
+      "pedal-flush toilets",
+      "climate control",
+      "interior LED lighting",
+      "non-slip flooring",
+      "hands-free soap dispensers",
+      "hands-free paper towel dispensers"
+    ],
+    "aiSummary": "Restroom Trailer Texas provides durable, climate-controlled restroom trailers specifically designed for high-traffic construction sites and large projects. Their units offer hands-free amenities, flushing toilets, and running water to improve worker comfort on site.",
+    "aiPros": [
+      "Climate controlled",
+      "Hands-free operation",
+      "Wide range of capacity options"
+    ],
+    "aiCons": [
+      "No transparent pricing information",
+      "Delivery radius not specified"
+    ],
+    "sourceSnippet": "Five configurations from 2-stall to 10-station.",
+    "nicheFields": {
+      "stallsCount": 10,
+      "climateControlled": true,
+      "adaCompliant": false,
+      "rentalPriceEst": null,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "construction",
+        "high-traffic environments"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:17:43"
+  },
+  {
+    "slug": "restroom-trailers-richardson-tx",
+    "displayName": "Restroom Trailers",
+    "city": "Richardson",
+    "state": "TX",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.5starportapotty.com/restroomtrailers",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "per_event",
+    "pricingNote": null,
+    "amenities": [
+      "flushing toilets",
+      "sinks",
+      "running water",
+      "lighting",
+      "climate control",
+      "mirrors"
+    ],
+    "aiSummary": "5 Star Portable Toilets offers premium, climate-controlled restroom trailer rentals for a wide variety of events and construction projects across North Texas and Southern Oklahoma. They provide full-service delivery, setup, and maintenance to ensure professional and convenient facilities for gatherings of any size.",
+    "aiPros": [
+      "Climate-controlled units",
+      "Full-service delivery and setup",
+      "Versatile for both events and long-term construction"
+    ],
+    "aiCons": [
+      "No specific pricing information provided",
+      "Delivery range defined by regions rather than specific miles"
+    ],
+    "sourceSnippet": "5 Star Portable Toilets provides rentals throughout North Texas and Southern Oklahoma.",
+    "nicheFields": {
+      "stallsCount": null,
+      "climateControlled": true,
+      "adaCompliant": false,
+      "rentalPriceEst": null,
+      "deliveryRadiusMiles": null,
+      "suitedForEvents": [
+        "weddings",
+        "corporate events",
+        "construction",
+        "festivals",
+        "reunions",
+        "church events",
+        "school events",
+        "sporting events"
+      ],
+      "hasRunningWater": true,
+      "hasFlushingToilets": true
+    },
+    "lastVerified": "2026-07-11 17:17:49"
   }
 ]
