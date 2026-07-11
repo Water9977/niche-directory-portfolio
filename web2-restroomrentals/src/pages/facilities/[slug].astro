@@ -1,0 +1,416 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import PricingCard from '../../components/PricingCard.astro';
+import AmenityBadges from '../../components/AmenityBadges.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import MapEmbed from '../../components/MapEmbed.astro';
+
+export async function getStaticPaths() {
+  if (listings.length === 0) {
+    return [
+      {
+        params: { slug: 'sample-luxury-restrooms' },
+        props: {
+          listing: {
+            slug: 'sample-luxury-restrooms',
+            displayName: 'Sample Luxury Restrooms',
+            city: 'McKinney',
+            state: 'TX',
+            zipCode: '75070',
+            fullAddress: 'McKinney, TX 75070',
+            latitude: null,
+            longitude: null,
+            phone: '(555) 555-5555',
+            website: 'https://example.com',
+            rating: 4.8,
+            reviewsCount: 12,
+            pricingMin: 850,
+            pricingMax: 1500,
+            pricingPeriod: 'per_event',
+            pricingNote: 'Delivery and set up included',
+            amenities: ['Air Conditioning', 'Stereo System', 'Vanity Mirrors', 'Running Water'],
+            aiSummary: 'A premier event sanitation provider specializing in weddings and outdoor parties.',
+            aiPros: ['High-end luxury interiors', 'Climate controlled units'],
+            aiCons: ['Requires water hookup'],
+            sourceSnippet: 'Starting from $850 for weekend rentals',
+            nicheFields: {
+              stallsCount: 4,
+              climateControlled: true,
+              adaCompliant: true,
+              rentalPriceEst: 850,
+              deliveryRadiusMiles: 50,
+              suitedForEvents: ['weddings', 'parties'],
+              hasRunningWater: true,
+              hasFlushingToilets: true
+            },
+            lastVerified: '2026-07-11 12:00:00'
+          }
+        }
+      }
+    ];
+  }
+  
+  return listings.map(item => {
+    return {
+      params: { slug: item.slug },
+      props: { listing: item }
+    };
+  });
+}
+
+const { listing } = Astro.props;
+
+const stateNames: Record<string, string> = {
+  tx: 'Texas',
+  tn: 'Tennessee',
+  nc: 'North Carolina'
+};
+const stateName = stateNames[listing.state.toLowerCase()] || listing.state.toUpperCase();
+
+const breadcrumbItems = [
+  { name: stateName, url: `/${listing.state.toLowerCase()}` },
+  { name: listing.city, url: `/${listing.state.toLowerCase()}/${listing.city.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` },
+  { name: listing.displayName }
+];
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": listing.displayName,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": listing.city,
+    "addressRegion": listing.state,
+    "postalCode": listing.zipCode || ""
+  },
+  "telephone": listing.phone || "",
+  "url": listing.website || "",
+  "aggregateRating": listing.rating ? {
+    "@type": "AggregateRating",
+    "ratingValue": listing.rating,
+    "reviewCount": listing.reviewsCount || 1
+  } : undefined,
+  "priceRange": listing.pricingMin ? `$${listing.pricingMin}/event` : "Request event quote"
+});
+---
+
+<Layout
+  title={`${listing.displayName} – Luxury Restroom Trailers in ${listing.city}, ${listing.state.toUpperCase()}`}
+  description={`Pricing, stall capacities, and specs for ${listing.displayName} in ${listing.city}, ${listing.state.toUpperCase()}.`}
+  schemaMarkup={schema}
+>
+  <div class="facility-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="profile-layout animate-fade-in">
+        <div class="profile-main">
+          <div class="profile-header">
+            <span class="location-tag">{listing.city}, {stateName}</span>
+            <h1>{listing.displayName}</h1>
+            
+            {listing.rating && (
+              <div class="rating-display">
+                <span class="stars">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
+                </span>
+                <span class="rating-val"><strong>{listing.rating.toFixed(1)}</strong> ({listing.reviewsCount} reviews)</span>
+              </div>
+            )}
+          </div>
+
+          <PricingCard
+            pricingMin={listing.pricingMin}
+            pricingMax={listing.pricingMax}
+            pricingPeriod={listing.pricingPeriod}
+            pricingNote={listing.pricingNote}
+            sourceSnippet={listing.sourceSnippet}
+          />
+
+          <div class="profile-section">
+            <h2>AI Review & Verification</h2>
+            <p class="summary-text">{listing.aiSummary}</p>
+            
+            <div class="pros-cons-grid">
+              {listing.aiPros && listing.aiPros.length > 0 && (
+                <div class="pros-box">
+                  <h4>Highlights</h4>
+                  <ul>
+                    {listing.aiPros.map((pro: string) => (
+                      <li>{pro}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {listing.aiCons && listing.aiCons.length > 0 && (
+                <div class="cons-box">
+                  <h4>Logistics Details</h4>
+                  <ul>
+                    {listing.aiCons.map((con: string) => (
+                      <li>{con}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2>Trailer Specifications</h2>
+            <div class="features-grid">
+              <div class="feature-item">
+                <span class="feature-label">Maximum Stall Count:</span>
+                <span class="val-yes">{listing.nicheFields.stallsCount ? `${listing.nicheFields.stallsCount} Station Trailer` : "Varies / Contact"}</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Climate Controlled (AC/Heat):</span>
+                <span class={listing.nicheFields.climateControlled ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.climateControlled ? "Yes (Verified)" : "No / Standard ventilation"}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">ADA Compliant units:</span>
+                <span class={listing.nicheFields.adaCompliant ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.adaCompliant ? "Yes (Available)" : "No / Standard units only"}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Running Water Sinks:</span>
+                <span class={listing.nicheFields.hasRunningWater ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.hasRunningWater ? "Yes (Hands-free vanity)" : "No / Hand sanitizer only"}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Flushing Toilets:</span>
+                <span class={listing.nicheFields.hasFlushingToilets ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.hasFlushingToilets ? "Yes (Pedal/hands-free flush)" : "No / Gravity drop only"}
+                </span>
+              </div>
+              {listing.nicheFields.deliveryRadiusMiles && (
+                <div class="feature-item">
+                  <span class="feature-label">Free Delivery Zone:</span>
+                  <span class="val-ratio">Up to {listing.nicheFields.deliveryRadiusMiles} miles</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2>Premium Specs & Amenities</h2>
+            <AmenityBadges amenities={listing.amenities} />
+          </div>
+
+          {listing.fullAddress && (
+            <div class="profile-section">
+              <h2>Service Depot Location</h2>
+              <p class="address-text">{listing.fullAddress}</p>
+              <MapEmbed address={listing.fullAddress} />
+            </div>
+          )}
+          
+          <div class="profile-section source-website">
+            <p>Visit their website for booking requests: <a href={listing.website} target="_blank" rel="noopener noreferrer">{listing.website}</a></p>
+          </div>
+        </div>
+
+        <div class="profile-sidebar">
+          <ContactForm facilityName={listing.displayName} />
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .profile-layout {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .profile-layout {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .profile-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .location-tag {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .profile-header h1 {
+    font-size: 2.5rem;
+    margin-top: var(--space-2xs);
+    margin-bottom: var(--space-xs);
+  }
+
+  .rating-display {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 1rem;
+  }
+
+  .stars {
+    color: var(--accent);
+    display: inline-flex;
+  }
+
+  .rating-val {
+    color: var(--text-muted);
+  }
+
+  .profile-section {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .profile-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: var(--space-xs);
+  }
+
+  .summary-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+  }
+
+  .pros-cons-grid {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 600px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .pros-box h4,
+  .cons-box h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+  }
+
+  .pros-box h4 { color: var(--accent); }
+  .cons-box h4 { color: var(--text-muted); }
+
+  .pros-box ul,
+  .cons-box ul {
+    list-style: none;
+  }
+
+  .pros-box li,
+  .cons-box li {
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xs);
+    position: relative;
+    padding-left: var(--space-lg);
+    line-height: 1.4;
+  }
+
+  .pros-box li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .cons-box li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 1.2rem;
+    top: -2px;
+  }
+
+  .features-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 600px) {
+    .features-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    background-color: var(--secondary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .feature-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .val-yes {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 2px;
+  }
+
+  .val-no {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .val-ratio {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+
+  .address-text {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+
+  .source-website {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,226 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import Card from '../../components/Card.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import FAQ from '../../components/FAQ.astro';
+
+export async function getStaticPaths() {
+  const paths = listings.map(item => {
+    return {
+      params: {
+        state: item.state.toLowerCase(),
+        city: item.city.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      },
+      props: {
+        cityName: item.city,
+        stateCode: item.state
+      }
+    };
+  });
+  
+  if (paths.length === 0) {
+    return [
+      { params: { state: 'tx', city: 'mckinney' }, props: { cityName: 'McKinney', stateCode: 'tx' } },
+      { params: { state: 'tn', city: 'franklin' }, props: { cityName: 'Franklin', stateCode: 'tn' } },
+      { params: { state: 'nc', city: 'huntersville' }, props: { cityName: 'Huntersville', stateCode: 'nc' } }
+    ];
+  }
+  
+  const uniquePaths = Array.from(new Set(paths.map(p => JSON.stringify(p)))).map(s => JSON.parse(s));
+  return uniquePaths;
+}
+
+const { cityName, stateCode } = Astro.props;
+
+// Filter listings
+const cityListings = listings.filter(
+  l => l.city.toLowerCase() === cityName.toLowerCase() && l.state.toLowerCase() === stateCode.toLowerCase()
+);
+
+const stateNames: Record<string, string> = {
+  tx: 'Texas',
+  tn: 'Tennessee',
+  nc: 'North Carolina'
+};
+const stateName = stateNames[stateCode.toLowerCase()] || stateCode.toUpperCase();
+
+const pricedListings = cityListings.filter(l => l.pricingMin);
+const avgCost = pricedListings.length > 0 
+  ? pricedListings.reduce((sum, l) => sum + (l.pricingMin || 0), 0) / pricedListings.length
+  : null;
+
+// Breadcrumbs
+const breadcrumbItems = [
+  { name: stateName, url: `/${stateCode.toLowerCase()}` },
+  { name: cityName }
+];
+
+const faqItems = [
+  {
+    question: `How much is it to rent a luxury restroom trailer in ${cityName}?`,
+    answer: avgCost 
+      ? `Based on our verified rental records, the average starting cost of luxury restroom trailers in ${cityName} is ${formatCost(avgCost)} per event. Prices vary from ${formatCost(Math.min(...pricedListings.map(l => l.pricingMin || 0)))} up to $2,500 depending on guest capacity, stall stations, and luxury styling.`
+      : `Based on our records, luxury restroom trailer rentals in ${cityName} typically start around $750 to $1,200 per event. Prices vary based on the guest capacity, station count, and seasonal availability.`
+  },
+  {
+    question: `How far in advance should I book restroom trailers in ${cityName}, ${stateCode.toUpperCase()}?`,
+    answer: `For peak event months (May through October), we recommend booking your luxury restroom trailers at least 6 to 9 months in advance. Late spring and early autumn wedding dates book up exceptionally fast.`
+  }
+];
+
+function formatCost(cost: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(cost);
+}
+---
+
+<Layout
+  title={`Best Luxury Restroom Trailer Rentals in ${cityName}, ${stateCode.toUpperCase()}`}
+  description={`Compare verified luxury restroom trailers, ADA units, and pricing in ${cityName}, ${stateCode.toUpperCase()} for your wedding or event.`}
+>
+  <div class="city-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="city-header animate-fade-in">
+        <h1>Luxury Restroom Trailer Rentals in {cityName}, {stateName}</h1>
+        <p class="lead">Compare local restroom trailer providers, stall counts, climate control features, and guest capacities in {cityName}.</p>
+      </div>
+
+      <div class="city-content-grid">
+        <div class="listings-column">
+          <div class="section-heading">
+            <h2>Local Rental Providers</h2>
+          </div>
+          
+          {cityListings.length > 0 ? (
+            <div class="cards-list">
+              {cityListings.map(item => (
+                <Card
+                  slug={item.slug}
+                  displayName={item.displayName}
+                  city={item.city}
+                  state={item.state}
+                  rating={item.rating}
+                  pricingMin={item.pricingMin}
+                  pricingPeriod={item.pricingPeriod}
+                  pricingNote={item.pricingNote}
+                  stallsCount={item.nicheFields.stallsCount}
+                  climateControlled={item.nicheFields.climateControlled}
+                  adaCompliant={item.nicheFields.adaCompliant}
+                />
+              ))}
+            </div>
+          ) : (
+            <div class="no-listings-card">
+              <h4>No listings enriched yet</h4>
+              <p>We are currently verifying and enrichment local rental providers in {cityName}. Use the inquiry form on the right to check availability directly.</p>
+            </div>
+          )}
+
+          {cityListings.length > 0 && (
+            <>
+              <div class="section-heading mt-xl">
+                <h2>Side-by-Side Specifications</h2>
+                <p>Direct comparison of rental stall counts, ADA accessibility, climate control status, and flushing toilets.</p>
+              </div>
+              <ComparisonTable listings={cityListings} />
+            </>
+          )}
+
+          <div class="section-heading mt-xl">
+            <h2>Frequently Asked Questions in {cityName}</h2>
+          </div>
+          <FAQ items={faqItems} />
+        </div>
+
+        <div class="sidebar-column">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .city-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .city-header h1 {
+    font-size: 2.4rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 800px;
+  }
+
+  .city-content-grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .city-content-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .section-heading {
+    margin-bottom: var(--space-md);
+  }
+
+  .section-heading h2 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: var(--space-xs);
+  }
+
+  .section-heading p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .no-listings-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-xl);
+  }
+
+  .no-listings-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+    color: var(--primary);
+  }
+
+  .no-listings-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .mt-xl {
+    margin-top: var(--space-2xl);
+  }
+</style>

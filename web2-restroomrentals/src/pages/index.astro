@@ -1,0 +1,342 @@
+---
+import Layout from '../layouts/Layout.astro';
+import listings from '../data/listings.json';
+import Card from '../components/Card.astro';
+import FAQ from '../components/FAQ.astro';
+
+const states = [
+  { name: 'Texas', code: 'tx', cities: ['McKinney', 'Richardson', 'Frisco', 'Georgetown', 'Leander', 'Wimberley'] },
+  { name: 'Tennessee', code: 'tn', cities: ['Franklin', 'Brentwood', 'Murfreesboro', 'Nolensville'] },
+  { name: 'North Carolina', code: 'nc', cities: ['Huntersville', 'Cornelius', 'Weddington'] }
+];
+
+const getCityCount = (city: string, state: string) => {
+  return listings.filter(l => l.city.toLowerCase() === city.toLowerCase() && l.state.toLowerCase() === state.toLowerCase()).length;
+};
+
+const featuredListings = listings.filter(l => l.rating && l.rating >= 4.5).slice(0, 3);
+
+const faqItems = [
+  {
+    question: "How much does a luxury restroom trailer cost to rent?",
+    answer: "Luxury restroom trailer rentals typically range from $750 to $2,500 per event day. The final cost depends on the trailer size (2-stall to 10-stall units), climate control features, event duration, delivery distance, and whether on-site attendants or generator power are required."
+  },
+  {
+    question: "Do luxury restroom trailers require water and electric hookups?",
+    answer: "Most luxury trailers require a standard garden hose connection for water and at least one or two dedicated 110V/20A electrical outlets. However, if utilities are unavailable, many companies offer self-contained water tanks and generator rentals at an additional charge."
+  },
+  {
+    question: "What is the delivery radius for restroom trailer companies?",
+    answer: "Most local rental companies deliver within a 50 to 75-mile radius from their depot without extra mileage surcharges. For events further out, delivery fees are calculated per mile, usually ranging from $1.50 to $3.00 per round-trip mile."
+  }
+];
+---
+
+<Layout
+  title="Restroom Rentals — Luxury Event Portable Restrooms & Trailer Pricing"
+  description="Compare local luxury restroom trailers, portable toilet rentals, and event sanitation options with verified specs and guest capacities."
+>
+  <!-- Hero Section -->
+  <section class="hero section">
+    <div class="container hero-container">
+      <div class="hero-content animate-fade-in">
+        <span class="hero-tag">Verified Event Services</span>
+        <h1>Compare Luxury Restroom Trailers Side-by-Side</h1>
+        <p>Planning a wedding, corporate event, or festival? RestroomRentals tracks local portable restroom trailer providers, stall configurations, ADA units, and estimated delivery zones so you can secure quotes in minutes.</p>
+        <div class="hero-actions">
+          <a href="#browse" class="btn btn-primary">Browse Directories</a>
+          <a href="#about" class="btn btn-outline">Trailer Configurations</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse Section -->
+  <section id="browse" class="section browse-section">
+    <div class="container">
+      <h2 class="section-title">Browse Rentals by State</h2>
+      <p class="section-subtitle">Select a state and city to view verified event sanitation providers and trailer specifications.</p>
+      
+      <div class="grid grid-3">
+        {states.map(state => (
+          <div class="state-card">
+            <h3>{state.name}</h3>
+            <div class="city-links">
+              {state.cities.map(city => {
+                const count = getCityCount(city, state.code);
+                const href = `/${state.code}/${city.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+                return (
+                  <a href={href} class="city-link">
+                    <span class="city-name">{city}</span>
+                    <span class="city-count">{count} {count === 1 ? 'listing' : 'listings'}</span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Section -->
+  {featuredListings.length > 0 && (
+    <section class="section featured-section">
+      <div class="container">
+        <h2 class="section-title">Top Rated Event Rental Providers</h2>
+        <p class="section-subtitle">Highly reviewed sanitation specialists featuring luxury wedding trailers and responsive customer support.</p>
+        
+        <div class="grid grid-3">
+          {featuredListings.map(item => (
+            <Card
+              slug={item.slug}
+              displayName={item.displayName}
+              city={item.city}
+              state={item.state}
+              rating={item.rating}
+              pricingMin={item.pricingMin}
+              pricingPeriod={item.pricingPeriod}
+              pricingNote={item.pricingNote}
+              stallsCount={item.nicheFields.stallsCount}
+              climateControlled={item.nicheFields.climateControlled}
+              adaCompliant={item.nicheFields.adaCompliant}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Specifications Info Section -->
+  <section id="about" class="section info-section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-content">
+          <h2>Luxury Restroom Specifications</h2>
+          <p>Standard construction portapotties aren't suitable for upscale events. Our directory rates luxury trailers based on several premium criteria:</p>
+          <ul class="info-list">
+            <li>
+              <strong>Stall Stations:</strong> Compare sizes ranging from 2-stall trailers (up to 150 guests) to 10-stall trailers (up to 750 guests) to match your guest count.
+            </li>
+            <li>
+              <strong>Climate Control:</strong> Verified air-conditioning and heaters to ensure guest comfort in extreme summer heat or winter cold.
+            </li>
+            <li>
+              <strong>Running Water & Flush:</strong> All luxury trailers include hands-free flushing porcelain toilets and running water vanity sinks.
+            </li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>Need a Custom Quote?</h4>
+          <p>Rental rates fluctuate based on seasonal demand (especially wedding season from May to October). Select a listing and fill out the contact form to secure booking dates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Rates, logistics, and planning guidance for outdoor event restrooms.</p>
+      <FAQ items={faqItems} />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Styles */
+  .hero {
+    background: linear-gradient(135deg, var(--primary-light) 0%, hsl(155, 60%, 98%) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-container {
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-content {
+    max-width: 780px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background-color: var(--accent);
+    color: var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    color: var(--text-main);
+    margin-bottom: var(--space-md);
+    line-height: 1.15;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  /* Section Headers */
+  .section-title {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: var(--space-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Browse Cards */
+  .state-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .state-card h3 {
+    font-size: 1.35rem;
+    margin-bottom: var(--space-lg);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: var(--space-xs);
+  }
+
+  .city-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .city-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-page);
+    border: 1px solid transparent;
+  }
+
+  .city-link:hover {
+    border-color: var(--accent);
+    background-color: var(--primary-light);
+  }
+
+  .city-name {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .city-count {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background-color: var(--bg-card);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  /* Info Section */
+  .info-section {
+    background-color: var(--secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-grid {
+    display: grid;
+    gap: var(--space-2xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .info-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .info-content h2 {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .info-list {
+    list-style: none;
+    margin-top: var(--space-md);
+  }
+
+  .info-list li {
+    margin-bottom: var(--space-md);
+    position: relative;
+    padding-left: var(--space-xl);
+  }
+
+  .info-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .info-card {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 4px solid var(--accent);
+  }
+
+  .info-card h4 {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .info-card p {
+    color: #a0aec0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 {
+      font-size: 2.25rem;
+    }
+  }
+</style>

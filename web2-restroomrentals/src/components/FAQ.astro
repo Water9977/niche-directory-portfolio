@@ -1,0 +1,103 @@
+---
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FAQItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="faq-container">
+  {items.map((item, index) => (
+    <details class="faq-item" open={index === 0}>
+      <summary class="faq-question">
+        <span>{item.question}</span>
+        <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </summary>
+      <div class="faq-answer">
+        <p>{item.answer}</p>
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .faq-item {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+
+  .faq-item[open] {
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent);
+  }
+
+  .faq-question {
+    padding: var(--space-md) var(--space-lg);
+    font-weight: 600;
+    font-size: 1.05rem;
+    font-family: var(--font-display);
+    color: var(--text-main);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .chevron-icon {
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+  }
+
+  .faq-item[open] .chevron-icon {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-lg) var(--space-md) var(--space-lg);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    border-top: 1px solid transparent;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .faq-item[open] .faq-answer {
+    border-color: var(--border);
+  }
+
+  @media (max-width: 600px) {
+    .faq-question {
+      font-size: 0.95rem;
+      padding: var(--space-md);
+    }
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

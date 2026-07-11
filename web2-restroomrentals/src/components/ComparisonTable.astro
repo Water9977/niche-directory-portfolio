@@ -1,0 +1,183 @@
+---
+interface Listing {
+  slug: string;
+  displayName: string;
+  rating: number | null;
+  pricingMin: number | null;
+  pricingPeriod: string;
+  nicheFields: {
+    stallsCount: number | null;
+    climateControlled: boolean;
+    adaCompliant: boolean;
+    hasRunningWater: boolean;
+    hasFlushingToilets: boolean;
+  };
+}
+
+interface Props {
+  listings: Listing[];
+}
+
+const { listings } = Astro.props;
+
+const formatCost = (cost: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(cost);
+};
+---
+
+<div class="table-container">
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Provider Name</th>
+        <th>Event Price (Min)</th>
+        <th>Rating</th>
+        <th>Max Stalls</th>
+        <th>Climate Ctrl</th>
+        <th>ADA accessible</th>
+        <th>Flushing Toilets</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {listings.map((item) => (
+        <tr>
+          <td class="col-name">
+            <strong><a href={`/facilities/${item.slug}`}>{item.displayName}</a></strong>
+          </td>
+          <td class="col-cost">
+            {item.pricingMin ? `${formatCost(item.pricingMin)}/${item.pricingPeriod}` : 'Request quote'}
+          </td>
+          <td class="col-rating">
+            {item.rating ? (
+              <span class="rating-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+                {item.rating.toFixed(1)}
+              </span>
+            ) : (
+              '--'
+            )}
+          </td>
+          <td class="col-center">
+            {item.nicheFields.stallsCount || 'Varies'}
+          </td>
+          <td class="col-check">
+            {item.nicheFields.climateControlled ? (
+              <span class="check-yes">&#10004; Yes</span>
+            ) : (
+              <span class="check-no">&#10008; No</span>
+            )}
+          </td>
+          <td class="col-check">
+            {item.nicheFields.adaCompliant ? (
+              <span class="check-yes">&#10004; Yes</span>
+            ) : (
+              <span class="check-no">&#10008; No</span>
+            )}
+          </td>
+          <td class="col-check">
+            {item.nicheFields.hasFlushingToilets ? (
+              <span class="check-yes">&#10004; Yes</span>
+            ) : (
+              <span class="check-no">&#10008; No</span>
+            )}
+          </td>
+          <td class="col-action">
+            <a href={`/facilities/${item.slug}`} class="btn btn-primary btn-sm">Get Quote</a>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    background-color: var(--bg-card);
+    margin-bottom: var(--space-xl);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  .comparison-table th {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    padding: var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .comparison-table td {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .comparison-table tr:hover td {
+    background-color: var(--primary-light);
+  }
+
+  .col-name a {
+    color: var(--text-main);
+  }
+
+  .col-name a:hover {
+    color: var(--accent);
+  }
+
+  .col-cost {
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .col-center {
+    text-align: center;
+  }
+
+  .rating-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: hsl(43, 60%, 95%);
+    color: hsl(43, 60%, 35%);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .check-yes {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  .check-no {
+    color: var(--text-muted);
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+</style>
