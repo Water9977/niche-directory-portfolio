@@ -61,7 +61,7 @@ flowchart TD
     A["1. google_maps.py\n(Search Google Maps)"] -->|Place IDs, names, URLs| B["raw_listings table"]
     B -->|Rows with website != NULL| C["2. web_enricher.py\n(Firecrawl MCP scrape)"]
     C -->|Raw markdown per site| D["scraped_pages table"]
-    D -->|Markdown text blob| E["3. ai_processor.py\n(Gemini 2.5 Flash)"]
+    D -->|Markdown text blob| E["3. ai_processor.py\n(Gemini 2.5/3.5 Flash)"]
     E -->|Structured JSON fields| F["listings table"]
     F -->|4. export_json.py| G["web1-memorycare/src/data/listings.json\nweb2-restroomrentals/src/data/listings.json\nweb3-rvparks/src/data/listings.json"]
     G -->|5. astro build| H["Static HTML → Cloudflare Pages"]
@@ -342,7 +342,7 @@ ENRICHER_CONFIG = {
 
 #### Script 3: `ai_processor.py`
 **Input:** Reads `scraped_pages` rows where `scrape_status = 'scraped'` AND the matching `raw_listings.niche`.
-**Method:** Sends page markdown to Gemini 2.5 Flash API with a niche-specific prompt template.
+**Method:** Sends page markdown to Gemini 2.5/3.5 Flash API with a niche-specific prompt template.
 **Output:** Inserts/updates rows in `listings`.
 
 ```python
