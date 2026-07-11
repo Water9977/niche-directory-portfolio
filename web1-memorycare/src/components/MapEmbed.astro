@@ -1,0 +1,35 @@
+---
+interface Props {
+  address: string;
+}
+
+const { address } = Astro.props;
+
+// Convert address to URL-safe format
+const encodedAddress = encodeURIComponent(address);
+---
+
+<div class="map-embed-container">
+  <iframe
+    width="100%"
+    height="300"
+    style="border:0;"
+    loading="lazy"
+    allowfullscreen
+    referrerpolicy="no-referrer-when-downgrade"
+    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyD-dummykey-notusedinproduction&q=${encodedAddress}`}
+  >
+  </iframe>
+</div>
+
+<style>
+  .map-embed-container {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background-color: var(--secondary-dark);
+    height: 300px;
+    margin-bottom: var(--space-lg);
+  }
+</style>

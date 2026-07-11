@@ -1,0 +1,377 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import PricingCard from '../../components/PricingCard.astro';
+import AmenityBadges from '../../components/AmenityBadges.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import MapEmbed from '../../components/MapEmbed.astro';
+
+export async function getStaticPaths() {
+  return listings.map(item => {
+    return {
+      params: { slug: item.slug },
+      props: { listing: item }
+    };
+  });
+}
+
+const { listing } = Astro.props;
+
+// State Display name
+const stateNames: Record<string, string> = {
+  fl: 'Florida',
+  az: 'Arizona',
+  tx: 'Texas'
+};
+const stateName = stateNames[listing.state.toLowerCase()] || listing.state.toUpperCase();
+
+// Breadcrumbs
+const breadcrumbItems = [
+  { name: stateName, url: `/${listing.state.toLowerCase()}` },
+  { name: listing.city, url: `/${listing.state.toLowerCase()}/${listing.city.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` },
+  { name: listing.displayName }
+];
+
+// LocalBusiness Schema Markup
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "additionalType": "HealthAndBeautyBusiness",
+  "name": listing.displayName,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": listing.city,
+    "addressRegion": listing.state,
+    "postalCode": listing.zipCode || ""
+  },
+  "telephone": listing.phone || "",
+  "url": listing.website || "",
+  "aggregateRating": listing.rating ? {
+    "@type": "AggregateRating",
+    "ratingValue": listing.rating,
+    "reviewCount": listing.reviewsCount || 1
+  } : undefined,
+  "priceRange": listing.pricingMin ? `$${listing.pricingMin}/month` : "Contact for pricing",
+  "geo": listing.latitude ? {
+    "@type": "GeoCoordinates",
+    "latitude": listing.latitude,
+    "longitude": listing.longitude
+  } : undefined
+});
+---
+
+<Layout
+  title={`${listing.displayName} – Memory Care in ${listing.city}, ${listing.state.toUpperCase()}`}
+  description={`Details, pricing, and certified care reviews for ${listing.displayName} in ${listing.city}, ${listing.state.toUpperCase()}.`}
+  schemaMarkup={schema}
+>
+  <div class="facility-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="profile-layout animate-fade-in">
+        <div class="profile-main">
+          <!-- Header info -->
+          <div class="profile-header">
+            <span class="location-tag">{listing.city}, {stateName}</span>
+            <h1>{listing.displayName}</h1>
+            
+            {listing.rating && (
+              <div class="rating-display">
+                <span class="stars">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
+                </span>
+                <span class="rating-val"><strong>{listing.rating.toFixed(1)}</strong> ({listing.reviewsCount} reviews)</span>
+              </div>
+            )}
+          </div>
+
+          <!-- Cost Estimation -->
+          <PricingCard
+            pricingMin={listing.pricingMin}
+            pricingMax={listing.pricingMax}
+            pricingPeriod={listing.pricingPeriod}
+            pricingNote={listing.pricingNote}
+            sourceSnippet={listing.sourceSnippet}
+          />
+
+          <!-- AI Synthesized Summary & Pros/Cons -->
+          <div class="profile-section">
+            <h2>AI Review & Verification</h2>
+            <p class="summary-text">{listing.aiSummary}</p>
+            
+            <div class="pros-cons-grid">
+              {listing.aiPros && listing.aiPros.length > 0 && (
+                <div class="pros-box">
+                  <h4>Key Highlights</h4>
+                  <ul>
+                    {listing.aiPros.map((pro: string) => (
+                      <li>{pro}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {listing.aiCons && listing.aiCons.length > 0 && (
+                <div class="cons-box">
+                  <h4>Important Details</h4>
+                  <ul>
+                    {listing.aiCons.map((con: string) => (
+                      <li>{con}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <!-- Dementia care details -->
+          <div class="profile-section">
+            <h2>Dementia Care Features</h2>
+            <div class="features-grid">
+              <div class="feature-item">
+                <span class="feature-label">Alzheimer's Certified Staff:</span>
+                <span class={listing.nicheFields.dementiaCertified ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.dementiaCertified ? "Yes (Verified)" : "Contact for details"}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Secure Wander Unit:</span>
+                <span class={listing.nicheFields.secureWanderGuard ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.secureWanderGuard ? "Yes (Locked/Secured)" : "Contact for details"}
+                </span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Medicaid Accepted:</span>
+                <span class={listing.nicheFields.medicaidAccepted ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.medicaidAccepted ? "Yes (Waiver accepted)" : "No / Private pay only"}
+                </span>
+              </div>
+              {listing.nicheFields.staffToResidentRatio && (
+                <div class="feature-item">
+                  <span class="feature-label">Staff-to-Resident Ratio:</span>
+                  <span class="val-ratio">{listing.nicheFields.staffToResidentRatio}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <!-- Amenities -->
+          <div class="profile-section">
+            <h2>On-site Services & Amenities</h2>
+            <AmenityBadges amenities={listing.amenities} />
+          </div>
+
+          <!-- Map Embed -->
+          {listing.fullAddress && (
+            <div class="profile-section">
+              <h2>Location</h2>
+              <p class="address-text">{listing.fullAddress}</p>
+              <MapEmbed address={listing.fullAddress} />
+            </div>
+          )}
+          
+          <div class="profile-section source-website">
+            <p>For more detailed information, you can visit their website directly: <a href={listing.website} target="_blank" rel="noopener noreferrer">{listing.website}</a></p>
+          </div>
+        </div>
+
+        <div class="profile-sidebar">
+          <ContactForm facilityName={listing.displayName} />
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .profile-layout {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .profile-layout {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .profile-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .location-tag {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .profile-header h1 {
+    font-size: 2.75rem;
+    margin-top: var(--space-2xs);
+    margin-bottom: var(--space-xs);
+  }
+
+  .rating-display {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 1rem;
+  }
+
+  .stars {
+    color: hsl(45, 100%, 45%);
+    display: inline-flex;
+  }
+
+  .rating-val {
+    color: var(--text-muted);
+  }
+
+  .profile-section {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .profile-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: var(--space-xs);
+  }
+
+  .summary-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+  }
+
+  .pros-cons-grid {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 600px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .pros-box h4,
+  .cons-box h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+  }
+
+  .pros-box h4 { color: var(--success); }
+  .cons-box h4 { color: var(--text-muted); }
+
+  .pros-box ul,
+  .cons-box ul {
+    list-style: none;
+  }
+
+  .pros-box li,
+  .cons-box li {
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xs);
+    position: relative;
+    padding-left: var(--space-lg);
+    line-height: 1.4;
+  }
+
+  .pros-box li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: 800;
+  }
+
+  .cons-box li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 1.2rem;
+    top: -2px;
+  }
+
+  .features-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 600px) {
+    .features-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    background-color: var(--secondary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .feature-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .val-yes {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--success);
+    margin-top: 2px;
+  }
+
+  .val-no {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .val-ratio {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 2px;
+  }
+
+  .address-text {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+
+  .source-website {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+</style>

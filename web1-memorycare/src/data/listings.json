@@ -1,0 +1,361 @@
+[
+  {
+    "slug": "brookdale-phillippi-creek-sarasota-fl",
+    "displayName": "Brookdale Phillippi Creek",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.brookdale.com/en/communities/brookdale-phillippi-creek.html",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 3195.0,
+    "pricingMax": null,
+    "pricingPeriod": "monthly",
+    "pricingNote": "Prices shown represent the current lowest private pay basic service rate, as applicable, as of the date listed for a single occupancy unit in the listed community excluding any care costs or other fees, unless otherwise stated. Prices will vary based on living options, services and/or care provided, and by community. Prices listed are subject to availability and only available to new residents. Further restrictions may apply. Limited apartments may be eligible for specialized lower pricing. Private apartments may be available at a higher cost.",
+    "amenities": [
+      "Emergency Alert System",
+      "Pet Friendly",
+      "Fitness Center",
+      "Parking",
+      "Library",
+      "Café/Bistro",
+      "Dining",
+      "Housekeeping",
+      "Transportation",
+      "Music therapy",
+      "Pet therapy",
+      "Salon",
+      "Physical Therapy",
+      "Recreation Room",
+      "Courtyard",
+      "Gazebo",
+      "Community Room",
+      "Private Dining Room"
+    ],
+    "aiSummary": "Brookdale Phillippi Creek offers assisted living and memory care in Sarasota, Florida, emphasizing personalized support in a secure, homelike environment. The facility provides amenities like pet-friendly apartments, a fitness center, library, and various social activities. It also features Brookdale HealthPlus® for integrated healthcare and staff trained in Alzheimer's Association-recognized dementia care.",
+    "aiPros": [
+      "Staff training is recognized by the Alzheimer’s Association® for incorporating evidence-based Dementia Care Practice Recommendations.",
+      "Offers a secure, homelike setting for memory care with personalized support, including calming sensory experiences like music and pet visits.",
+      "Brookdale HealthPlus® provides personalized preventive care and chronic condition management directly within the community."
+    ],
+    "aiCons": [
+      "Full pricing details require contacting the facility, and listed 'starting at' prices exclude care costs and other fees.",
+      "Private apartments are available at a higher cost, but specific pricing is not disclosed."
+    ],
+    "sourceSnippet": "Memory Care Semi-Private Apartments$ starting at $3,195* a month",
+    "nicheFields": {
+      "dementiaCertified": true,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": 3195.0,
+      "medicaidAccepted": false,
+      "secureWanderGuard": true,
+      "memoryCareLevels": [],
+      "respiteCareAvailable": false
+    },
+    "lastVerified": "2026-07-11 12:34:05"
+  },
+  {
+    "slug": "memory-care-community-aravilla-sarasota-sarasota-fl",
+    "displayName": "Memory Care Community Aravilla Sarasota",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.aravillasarasota.com/memory-care-community-2/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "monthly",
+    "pricingNote": null,
+    "amenities": [
+      "24/7_nursing",
+      "specialized_medical_care",
+      "diabetic_meals",
+      "personal_concierge",
+      "daily_activities",
+      "live_music",
+      "outings",
+      "exercise_programs",
+      "chef-prepared_meals",
+      "furnished_rooms",
+      "garden",
+      "family_support_and_education"
+    ],
+    "aiSummary": "Aravilla Sarasota is a memory care community specializing in Alzheimer's and Dementia, focusing on compassion, care, and comfort. They provide 24/7 licensed nursing, specialized medical services, engaging daily activities, and chef-prepared meals in a secure, thoughtfully designed environment.",
+    "aiPros": [
+      "24/7 licensed nursing staff providing advanced specialty medical care (e.g., diabetes management, ostomy care).",
+      "Robust daily activities, live music, and frequent outings designed to stimulate and engage residents.",
+      "Secure, beautifully designed residences with chef-prepared, health-conscious meals and a focus on staff longevity."
+    ],
+    "aiCons": [
+      "No transparent pricing information is provided on the webpage.",
+      "Does not explicitly state acceptance of Medicaid or different memory care stages."
+    ],
+    "sourceSnippet": "Aravilla Sarasota Memory Care is a leader in dementia care and Alzheimer’s care, and nurturer of the human spirit.",
+    "nicheFields": {
+      "dementiaCertified": false,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": null,
+      "medicaidAccepted": false,
+      "secureWanderGuard": true,
+      "memoryCareLevels": [],
+      "respiteCareAvailable": false
+    },
+    "lastVerified": "2026-07-11 12:34:23"
+  },
+  {
+    "slug": "memory-care-at-brookdale-deer-creek-sarasota-sarasota-fl",
+    "displayName": "Memory Care at Brookdale Deer Creek Sarasota",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.brookdale.com/en/communities/brookdale-deer-creek-sarasota.html",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 3630.0,
+    "pricingMax": null,
+    "pricingPeriod": "monthly",
+    "pricingNote": "Starting at. Rate applies to a limited number of available apartments and excludes any care costs or other fees.",
+    "amenities": [
+      "Emergency Alert System",
+      "Library",
+      "Concierge Service",
+      "Beauty/Barber Shop",
+      "Courtyard and Garden",
+      "Porch"
+    ],
+    "aiSummary": "Brookdale Deer Creek Sarasota is a supportive memory care community in Sarasota, Florida, offering gentle structure and personalized attention. Utilizing the Clare Bridge approach, the facility provides 24/7 staffing and a comfortable environment for seniors living with dementia and Alzheimer's.",
+    "aiPros": [
+      "Clare Bridge Training recognized by the Alzheimer's Association",
+      "On-site staff available 24/7 to respond to support needs",
+      "Dementia-friendly menus with adaptive mealtimes"
+    ],
+    "aiCons": [
+      "Starting price excludes care costs or other fees",
+      "Limited availability for the lowest advertised rental rates"
+    ],
+    "sourceSnippet": "Starting at $3,630*per month\n\nLimited Availability Pricing",
+    "nicheFields": {
+      "dementiaCertified": true,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": 3630.0,
+      "medicaidAccepted": false,
+      "secureWanderGuard": false,
+      "memoryCareLevels": [
+        "Clare Bridge Memory Care",
+        "Clare Bridge Solace"
+      ],
+      "respiteCareAvailable": false
+    },
+    "lastVerified": "2026-07-11 15:58:09"
+  },
+  {
+    "slug": "brookdale-phillippi-creek-memory-care-in-sarasota-sarasota-fl",
+    "displayName": "Brookdale Phillippi Creek Memory Care in Sarasota",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.brookdale.com/en/communities/brookdale-phillippi-creek/memory-care.html",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "monthly",
+    "pricingNote": null,
+    "amenities": [
+      "enclosed courtyard",
+      "gardening",
+      "music sessions",
+      "aromatherapy",
+      "B-Fit program",
+      "walking groups"
+    ],
+    "aiSummary": "Brookdale Phillippi Creek in Sarasota, Florida offers specialized Assisted Living and Memory Care services. The facility utilizes the exclusive Clare Bridge and Solace programs to provide tailored daily routines and secure environments for residents with Alzheimer's and dementia.",
+    "aiPros": [
+      "Consistent care assignments to build strong relationships",
+      "Enclosed courtyard and secured entrances/exits for safety",
+      "Specialized Solace program for advanced stages of dementia"
+    ],
+    "aiCons": [
+      "No transparent pricing details provided directly on the webpage"
+    ],
+    "sourceSnippet": "Our memory care community includes secured entrances and exits and an enclosed courtyard for secure strolling.",
+    "nicheFields": {
+      "dementiaCertified": false,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": null,
+      "medicaidAccepted": false,
+      "secureWanderGuard": true,
+      "memoryCareLevels": [
+        "early_stages",
+        "advanced_stages"
+      ],
+      "respiteCareAvailable": false
+    },
+    "lastVerified": "2026-07-11 15:58:24"
+  },
+  {
+    "slug": "dementia-care-sarasota-fl",
+    "displayName": "Dementia Care",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://81oaks.com/community/memory-care/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": 7495.0,
+    "pricingMax": 7495.0,
+    "pricingPeriod": "monthly",
+    "pricingNote": "Based on the pricing data provided for Memory Care, which lists cost as 7495 as an all-inclusive monthly package.",
+    "amenities": [
+      "housekeeping",
+      "laundry",
+      "scheduled transportation",
+      "emergency response system",
+      "salon & spa",
+      "art studio",
+      "walking paths",
+      "garden courtyards",
+      "private dining room",
+      "movie theater",
+      "music therapy",
+      "art therapy",
+      "sensory gardening"
+    ],
+    "aiSummary": "81 Oaks is a senior living community located in Sarasota, Florida, offering compassionate, specialized Memory Care within its secure Grove neighborhood. The community provides 24/7 licensed support, personalized care plans overseen by a Wellness Director, and modern private suites. Residents benefit from comprehensive health monitoring, creative therapies, and premium amenities like an art studio, salon, and private theater.",
+    "aiPros": [
+      "24/7 on-site licensed caregivers and comprehensive health oversight led by a Wellness Director",
+      "Therapeutic engagement programs including music, art, and sensory gardening therapies",
+      "Private memory care suites within a secure neighborhood with all-inclusive monthly packages"
+    ],
+    "aiCons": [
+      "Specific staff-to-resident ratio is not disclosed"
+    ],
+    "sourceSnippet": "Every suite is part of an all-inclusive monthly package that covers: Personalized wellness support, Professional care services, Apartment maintenance, Utilities, Weekly housekeeping, Laundry and linen service",
+    "nicheFields": {
+      "dementiaCertified": false,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": 7495.0,
+      "medicaidAccepted": true,
+      "secureWanderGuard": true,
+      "memoryCareLevels": null,
+      "respiteCareAvailable": true
+    },
+    "lastVerified": "2026-07-11 15:58:31"
+  },
+  {
+    "slug": "memory-care-in-sarasota-sarasota-fl",
+    "displayName": "Memory Care in Sarasota",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.brookdale.com/en/communities/brookdale-sarasota-midtown/memory-care.html",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "monthly",
+    "pricingNote": null,
+    "amenities": [
+      "garden paths",
+      "enclosed courtyard",
+      "art classes",
+      "dance classes",
+      "excursions",
+      "aromatherapy"
+    ],
+    "aiSummary": "Brookdale Sarasota Midtown provides specialized memory care through its Clare Bridge programs, serving residents in early-stage to advanced dementia. The community emphasizes a secure, homelike environment with features like secured entrances, keypad entries, and consistent care partnerships. Structured activities including brain games, physical exercise, and aromatherapy help support current skills and promote daily purpose.",
+    "aiPros": [
+      "Consistent care partners assigned to promote relationships",
+      "Enclosed outdoor courtyard and secure strolling paths",
+      "Tailored programming for early (Crossings) and late-stage (Solace) dementia"
+    ],
+    "aiCons": [
+      "No specific monthly pricing information is provided directly on the page"
+    ],
+    "sourceSnippet": "Crossings was designed for seniors in the early stages of dementia. It’s a stepping stone between assisted living and memory care.",
+    "nicheFields": {
+      "dementiaCertified": false,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": null,
+      "medicaidAccepted": false,
+      "secureWanderGuard": true,
+      "memoryCareLevels": [
+        "early_stage",
+        "advanced_stage"
+      ],
+      "respiteCareAvailable": false
+    },
+    "lastVerified": "2026-07-11 15:58:44"
+  },
+  {
+    "slug": "assisted-living-memory-care-communities-sarasota-fl",
+    "displayName": "Assisted Living & Memory Care Communities",
+    "city": "Sarasota",
+    "state": "FL",
+    "zipCode": null,
+    "fullAddress": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": null,
+    "website": "https://www.aravillasarasota.com/",
+    "rating": null,
+    "reviewsCount": 0,
+    "pricingMin": null,
+    "pricingMax": null,
+    "pricingPeriod": "monthly",
+    "pricingNote": null,
+    "amenities": [
+      "beautiful grounds with wildlife sanctuary",
+      "lagoon",
+      "live music",
+      "dancing",
+      "games",
+      "creative arts & crafts",
+      "fitness activities",
+      "pet therapy"
+    ],
+    "aiSummary": "Aravilla Sarasota is a resort-style senior living community offering independent assisted living and specialized memory care, including an exclusive female-only unit. The community features a tropical campus with wildlife pathways, 24/7 onsite licensed nursing, and personal concierge services for new residents. It focuses on physical and cognitive wellness through daily enrichment programs, chef-prepared meals, and on-campus therapy services.",
+    "aiPros": [
+      "Unique 'Female Only' memory care option (Aravilla for HER)",
+      "24/7 onsite licensed nursing with advanced safety technology (AMBA AI)",
+      "Privately owned and locally operated, not corporately controlled"
+    ],
+    "aiCons": [],
+    "sourceSnippet": "At Aravilla Sarasota, we provide highly personalized care through both our Assisted Living and Memory Care communities, thoughtfully located on the same campus but in separate, dedicated spaces.",
+    "nicheFields": {
+      "dementiaCertified": false,
+      "staffToResidentRatio": null,
+      "monthlyFeeEst": null,
+      "medicaidAccepted": false,
+      "secureWanderGuard": true,
+      "memoryCareLevels": null,
+      "respiteCareAvailable": false
+    },
+    "lastVerified": "2026-07-11 15:58:50"
+  }
+]

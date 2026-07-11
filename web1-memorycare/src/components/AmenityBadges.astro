@@ -1,0 +1,54 @@
+---
+interface Props {
+  amenities: string[];
+}
+
+const { amenities } = Astro.props;
+---
+
+{amenities && amenities.length > 0 ? (
+  <div class="amenities-container">
+    {amenities.map((amenity) => (
+      <span class="amenity-tag">
+        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        {amenity.replace(/_/g, ' ')}
+      </span>
+    ))}
+  </div>
+) : (
+  <p class="no-amenities">No specific amenities extracted.</p>
+)}
+
+<style>
+  .amenities-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .amenity-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    background-color: var(--primary-light);
+    color: var(--primary);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+
+  .check-icon {
+    color: var(--success);
+  }
+
+  .no-amenities {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>

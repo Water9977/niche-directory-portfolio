@@ -1,0 +1,345 @@
+---
+import Layout from '../layouts/Layout.astro';
+import listings from '../data/listings.json';
+import Card from '../components/Card.astro';
+import FAQ from '../components/FAQ.astro';
+
+// Calculate listings per state/city
+const states = [
+  { name: 'Florida', code: 'fl', cities: ['Sarasota', 'The Villages', 'Cape Coral', 'Clearwater', 'Lakeland', 'Ocala', 'Venice', 'Boynton Beach', 'Port St. Lucie'] },
+  { name: 'Arizona', code: 'az', cities: ['Mesa', 'Sun City', 'Scottsdale', 'Gilbert', 'Peoria'] }
+];
+
+// Get counts
+const getCityCount = (city: string, state: string) => {
+  return listings.filter(l => l.city.toLowerCase() === city.toLowerCase() && l.state.toLowerCase() === state.toLowerCase()).length;
+};
+
+// Filter top featured listings
+const featuredListings = listings.filter(l => l.rating && l.rating >= 4.5).slice(0, 3);
+
+// FAQ Items
+const faqItems = [
+  {
+    question: "What is the average cost of memory care in Florida?",
+    answer: "Based on our verified facility records, the starting monthly basic fee for memory care in Florida suburbs like Sarasota ranges from $3,195 to $4,500. This fee typically excludes level-of-care add-ons such as medication administration, personal hygiene assistance, and specialized wander management."
+  },
+  {
+    question: "How does memory care differ from standard assisted living?",
+    answer: "Memory care is a specialized form of assisted living designed specifically for individuals with Alzheimer's, dementia, and other cognitive challenges. It features locked or secured wander guard zones, sensory therapy programs (music, arts, pet stimulation), and staff trained specifically in dementia management."
+  },
+  {
+    question: "Does Medicaid pay for dementia care facilities?",
+    answer: "Medicaid coverage for memory care varies significantly by state and facility. Some centers accept state Medicaid waivers, but they usually require prior approval and have strict income limits. Many premium communities are private-pay only. Our directory lists Medicaid acceptance status under each facility's details."
+  }
+];
+---
+
+<Layout
+  title="Memory Care Finder — Verified Dementia Care & Cost Directory"
+  description="Compare local memory care and dementia care facilities with verified monthly pricing, staff ratios, Medicaid status, and Alzheimer's certifications."
+>
+  <!-- Hero Section -->
+  <section class="hero section">
+    <div class="container hero-container">
+      <div class="hero-content animate-fade-in">
+        <span class="hero-tag">Verified Senior Living Data</span>
+        <h1>Find Local Memory Care With Transparent Pricing</h1>
+        <p>Most senior care directories hide pricing behind sales calls. We crawl and verify starting costs, dementia certifications, and security features directly from facility records to help you make informed decisions.</p>
+        <div class="hero-actions">
+          <a href="#browse" class="btn btn-primary">Browse Directories</a>
+          <a href="#how-it-works" class="btn btn-outline">Our Verification Process</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse Section -->
+  <section id="browse" class="section browse-section">
+    <div class="container">
+      <h2 class="section-title">Browse Facilities by Region</h2>
+      <p class="section-subtitle">Select a state and city to view verified local dementia care guides.</p>
+      
+      <div class="grid grid-2">
+        {states.map(state => (
+          <div class="state-card">
+            <h3>{state.name}</h3>
+            <div class="city-links">
+              {state.cities.map(city => {
+                const count = getCityCount(city, state.code);
+                // Only link if we have listings, or show default state
+                const href = `/${state.code}/${city.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+                return (
+                  <a href={href} class="city-link">
+                    <span class="city-name">{city}</span>
+                    <span class="city-count">{count} {count === 1 ? 'listing' : 'listings'}</span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Section -->
+  {featuredListings.length > 0 && (
+    <section class="section featured-section">
+      <div class="container">
+        <h2 class="section-title">Top Rated Memory Care Communities</h2>
+        <p class="section-subtitle">Highly-reviewed facilities featuring dementia-certified staff and secured wander guard zones.</p>
+        
+        <div class="grid grid-3">
+          {featuredListings.map(item => (
+            <Card
+              slug={item.slug}
+              displayName={item.displayName}
+              city={item.city}
+              state={item.state}
+              rating={item.rating}
+              pricingMin={item.pricingMin}
+              pricingPeriod={item.pricingPeriod}
+              pricingNote={item.pricingNote}
+              dementiaCertified={item.nicheFields.dementiaCertified}
+              secureWanderGuard={item.nicheFields.secureWanderGuard}
+              medicaidAccepted={item.nicheFields.medicaidAccepted}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="section info-section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-content">
+          <h2>Our Verification Moat</h2>
+          <p>Unlike national aggregators that sell your contact details as leads, we build comprehensive, factual profiles by running targeted programmatic extractions on local business sites:</p>
+          <ul class="info-list">
+            <li>
+              <strong>Pricing Extraction:</strong> We scan tuition charts, rate documents, and service guidelines to pull verified starting monthly basic fees.
+            </li>
+            <li>
+              <strong>Dementia Certifications:</strong> We identify whether staff hold certifications from the Alzheimer's Association or state health departments.
+            </li>
+            <li>
+              <strong>Security Auditing:</strong> We cross-reference security features like wander guard locks, electronic gates, and 24/7 licensed nursing.
+            </li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>No Sales Calls. No Spam.</h4>
+          <p>We do not require your email address or phone number to unlock pricing. Compare listings freely and contact facilities directly when you are ready.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Critical facts about memory care pricing, qualifications, and state regulations.</p>
+      <FAQ items={faqItems} />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Styles */
+  .hero {
+    background: linear-gradient(135deg, var(--primary-light) 0%, hsl(215, 60%, 98%) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-container {
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-content {
+    max-width: 750px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    color: var(--text-main);
+    margin-bottom: var(--space-md);
+    line-height: 1.1;
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  /* Section Headers */
+  .section-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: var(--space-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Browse Cards */
+  .state-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .state-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: var(--space-lg);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: var(--space-xs);
+  }
+
+  .city-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .city-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-page);
+    border: 1px solid transparent;
+  }
+
+  .city-link:hover {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+  }
+
+  .city-name {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .city-count {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background-color: var(--bg-card);
+    padding: 2px 8px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+  }
+
+  /* Info Section */
+  .info-section {
+    background-color: var(--secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-grid {
+    display: grid;
+    gap: var(--space-2xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .info-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .info-content h2 {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .info-list {
+    list-style: none;
+    margin-top: var(--space-md);
+  }
+
+  .info-list li {
+    margin-bottom: var(--space-md);
+    position: relative;
+    padding-left: var(--space-xl);
+  }
+
+  .info-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--success);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .info-card {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .info-card h4 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .info-card p {
+    color: var(--primary-light);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 {
+      font-size: 2.25rem;
+    }
+  }
+</style>

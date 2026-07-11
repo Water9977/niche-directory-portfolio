@@ -1,0 +1,155 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+export async function getStaticPaths() {
+  const uniqueStates = [...new Set(listings.map(l => l.state.toLowerCase()))];
+  return uniqueStates.map(state => {
+    return {
+      params: { state },
+      props: { stateCode: state }
+    };
+  });
+}
+
+const { stateCode } = Astro.props;
+
+// Filter listings for this state
+const stateListings = listings.filter(l => l.state.toLowerCase() === stateCode.toLowerCase());
+
+// Get state display name
+const stateNames: Record<string, string> = {
+  fl: 'Florida',
+  az: 'Arizona',
+  tx: 'Texas'
+};
+const stateName = stateNames[stateCode.toLowerCase()] || stateCode.toUpperCase();
+
+// Group listings by city in this state
+const citiesMap = stateListings.reduce((acc: Record<string, typeof listings>, item) => {
+  const city = item.city;
+  if (!acc[city]) {
+    acc[city] = [];
+  }
+  acc[city].push(item);
+  return acc;
+}, {});
+
+const cities = Object.keys(citiesMap).map(cityName => {
+  const cityListings = citiesMap[cityName];
+  const avgCost = cityListings.reduce((sum, item) => sum + (item.pricingMin || 0), 0) / cityListings.filter(l => l.pricingMin).length;
+  return {
+    name: cityName,
+    slug: cityName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    count: cityListings.length,
+    avgPrice: avgCost || null
+  };
+});
+
+// Breadcrumbs
+const breadcrumbItems = [
+  { name: stateName }
+];
+
+// Formatting helper
+const formatCost = (cost: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(cost);
+};
+---
+
+<Layout
+  title={`Memory Care Facilities in ${stateName} — State Directory`}
+  description={`Compare memory care facilities and dementia care communities in ${stateName}. View listings, starting costs, and reviews by city.`}
+>
+  <div class="state-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="state-header animate-fade-in">
+        <h1>Memory Care Facilities in {stateName}</h1>
+        <p class="lead">Compare local memory care options, Alzheimer's care units, and respite services in {stateName} by selecting a city below.</p>
+      </div>
+      
+      <div class="grid grid-3">
+        {cities.map(city => (
+          <div class="city-card">
+            <h3>{city.name}</h3>
+            <div class="city-meta">
+              <span class="city-listing-count">{city.count} {city.count === 1 ? 'verified listing' : 'verified listings'}</span>
+              {city.avgPrice && (
+                <span class="city-avg-price">Average starting cost: <strong>{formatCost(city.avgPrice)}/mo</strong></span>
+              )}
+            </div>
+            <a href={`/${stateCode}/${city.slug}`} class="btn btn-outline city-btn">Browse {city.name}</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .state-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .state-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 800px;
+  }
+
+  .city-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: var(--transition);
+  }
+
+  .city-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+  }
+
+  .city-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+  }
+
+  .city-meta {
+    margin-bottom: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .city-avg-price {
+    margin-top: var(--space-2xs);
+    color: var(--text-main);
+  }
+
+  .city-btn {
+    margin-top: auto;
+    width: 100%;
+    text-align: center;
+  }
+</style>

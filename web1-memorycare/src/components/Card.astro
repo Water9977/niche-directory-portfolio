@@ -1,0 +1,201 @@
+---
+interface Props {
+  slug: string;
+  displayName: string;
+  city: string;
+  state: string;
+  rating: number | null;
+  pricingMin: number | null;
+  pricingPeriod: string;
+  pricingNote: string | null;
+  dementiaCertified: boolean;
+  secureWanderGuard: boolean;
+  medicaidAccepted: boolean;
+}
+
+const {
+  slug,
+  displayName,
+  city,
+  state,
+  rating,
+  pricingMin,
+  pricingPeriod,
+  pricingNote,
+  dementiaCertified,
+  secureWanderGuard,
+  medicaidAccepted
+} = Astro.props;
+
+// Formatting helper for currency
+const formatCost = (cost: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(cost);
+};
+---
+
+<div class="facility-card animate-fade-in">
+  <div class="card-header">
+    <span class="card-location">{city}, {state.toUpperCase()}</span>
+    {rating && (
+      <span class="card-rating">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+        {rating.toFixed(1)}
+      </span>
+    )}
+  </div>
+  
+  <div class="card-body">
+    <h3 class="card-title">
+      <a href={`/facilities/${slug}`}>{displayName}</a>
+    </h3>
+    
+    <div class="card-pricing">
+      {pricingMin ? (
+        <div>
+          <span class="pricing-label">Starting at</span>
+          <span class="pricing-amount">{formatCost(pricingMin)}</span>
+          <span class="pricing-period">/{pricingPeriod}</span>
+        </div>
+      ) : (
+        <span class="pricing-missing">Call for pricing details</span>
+      )}
+    </div>
+
+    <div class="card-badges">
+      {dementiaCertified && (
+        <span class="badge badge-success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Dementia Certified
+        </span>
+      )}
+      {secureWanderGuard && (
+        <span class="badge badge-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Wander Unit
+        </span>
+      )}
+      {medicaidAccepted && (
+        <span class="badge badge-primary">Medicaid accepted</span>
+      )}
+    </div>
+  </div>
+  
+  <div class="card-footer">
+    <a href={`/facilities/${slug}`} class="btn btn-outline card-btn">View Details</a>
+  </div>
+</div>
+
+<style>
+  .facility-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: var(--transition);
+  }
+
+  .facility-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xs);
+  }
+
+  .card-location {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .card-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: hsl(45, 100%, 45%);
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .card-title a {
+    color: var(--text-main);
+  }
+
+  .card-title a:hover {
+    color: var(--primary);
+  }
+
+  .card-pricing {
+    margin-bottom: var(--space-md);
+  }
+
+  .pricing-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .pricing-amount {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .pricing-period {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .pricing-missing {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: auto;
+    margin-bottom: var(--space-md);
+  }
+
+  .card-footer {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-md);
+    margin-top: auto;
+  }
+
+  .card-btn {
+    width: 100%;
+    text-align: center;
+  }
+</style>

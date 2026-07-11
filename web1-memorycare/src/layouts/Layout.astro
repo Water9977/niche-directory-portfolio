@@ -1,0 +1,103 @@
+---
+import '../styles/index.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  schemaMarkup?: string;
+}
+
+const { title, description, canonicalUrl, schemaMarkup } = Astro.props;
+
+// Determine current URL for SEO canonical
+const siteUrl = "https://memorycarefinder.directory";
+const currentUrl = canonicalUrl || siteUrl;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Canonical Link -->
+    <link rel="canonical" href={currentUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={currentUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content="/images/og-image.jpg" />
+
+    <!-- Schema.org JSON-LD hook -->
+    {schemaMarkup && (
+      <script type="application/ld+json" set:html={schemaMarkup}></script>
+    )}
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="container navbar-container">
+        <a href="/" class="logo">
+          <svg class="logo-heart" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          MemoryCare<span>Finder</span>
+        </a>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/fl/sarasota" class="nav-link">Sarasota, FL</a></li>
+            <li><a href="/az/mesa" class="nav-link">Mesa, AZ</a></li>
+            <li><a href="/fl/the-villages" class="nav-link">The Villages, FL</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3>MemoryCareFinder</h3>
+            <p>Empowering families with transparent pricing, verified staff-to-resident ratios, and certified dementia care directories.</p>
+          </div>
+          <div class="footer-nav">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/fl/sarasota">Sarasota Care Centers</a></li>
+              <li><a href="/az/mesa">Mesa Communities</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav">
+            <h4>Information</h4>
+            <ul>
+              <li><a href="/#how-it-works">How We Verify</a></li>
+              <li><a href="/#faq">Cost Questions</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {new Date().getFullYear()} MemoryCareFinder. All rights reserved.</p>
+          <p>Verified Senior Living Directories</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

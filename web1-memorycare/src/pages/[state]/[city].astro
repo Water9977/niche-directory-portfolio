@@ -1,0 +1,197 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import listings from '../../data/listings.json';
+import Card from '../../components/Card.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import FAQ from '../../components/FAQ.astro';
+
+export async function getStaticPaths() {
+  // Find all unique state/city combinations
+  const paths = listings.map(item => {
+    return {
+      params: {
+        state: item.state.toLowerCase(),
+        city: item.city.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      },
+      props: {
+        cityName: item.city,
+        stateCode: item.state
+      }
+    };
+  });
+  
+  // Deduplicate paths
+  const uniquePaths = Array.from(new Set(paths.map(p => JSON.stringify(p)))).map(s => JSON.parse(s));
+  return uniquePaths;
+}
+
+const { cityName, stateCode } = Astro.props;
+
+// Filter listings for this city
+const cityListings = listings.filter(
+  l => l.city.toLowerCase() === cityName.toLowerCase() && l.state.toLowerCase() === stateCode.toLowerCase()
+);
+
+// State Display name
+const stateNames: Record<string, string> = {
+  fl: 'Florida',
+  az: 'Arizona',
+  tx: 'Texas'
+};
+const stateName = stateNames[stateCode.toLowerCase()] || stateCode.toUpperCase();
+
+// Calculate average cost
+const pricedListings = cityListings.filter(l => l.pricingMin);
+const avgCost = pricedListings.length > 0 
+  ? pricedListings.reduce((sum, l) => sum + (l.pricingMin || 0), 0) / pricedListings.length
+  : null;
+
+// Breadcrumbs
+const breadcrumbItems = [
+  { name: stateName, url: `/${stateCode.toLowerCase()}` },
+  { name: cityName }
+];
+
+// Formatting helper
+const formatCost = (cost: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(cost);
+};
+
+// FAQ Items
+const faqItems = [
+  {
+    question: `How much does memory care cost in ${cityName}, ${stateCode.toUpperCase()}?`,
+    answer: avgCost 
+      ? `Based on our verified facility records, the average starting monthly basic fee for memory care in ${cityName} is ${formatCost(avgCost)}. Individual facility costs vary starting from ${formatCost(Math.min(...pricedListings.map(l => l.pricingMin || 0)))} depending on room size, amenities, and level of care required.`
+      : `Based on our records, memory care pricing in ${cityName} starts at approximately $3,195/month for basic semi-private suites. Individual facility costs vary depending on room size, amenities, and level of care required.`
+  },
+  {
+    question: `What certifications are required for dementia care in ${stateName}?`,
+    answer: `${stateName} requires facilities providing memory care services to have specialized licensing or Alzheimer's/dementia endorsements. Staff must complete dedicated dementia care training hours covering communication, behavioral management, and safety protocols.`
+  }
+];
+---
+
+<Layout
+  title={`Best Memory Care Facilities in ${cityName}, ${stateCode.toUpperCase()} — Pricing & Reviews`}
+  description={`Compare the top memory care and dementia care communities in ${cityName}, ${stateCode.toUpperCase()}. View verified monthly costs, staff ratios, and secure units.`}
+>
+  <div class="city-container section">
+    <div class="container">
+      <Breadcrumb items={breadcrumbItems} />
+      
+      <div class="city-header animate-fade-in">
+        <h1>Best Memory Care Facilities in {cityName}, {stateName}</h1>
+        <p class="lead">
+          Compare verified starting costs, dementia certifications, and security features for {cityListings.length} memory care centers in {cityName}.
+        </p>
+      </div>
+
+      <div class="city-content-grid">
+        <div class="listings-column">
+          <!-- Overview Cards -->
+          <div class="section-heading">
+            <h2>Local Care Providers</h2>
+          </div>
+          
+          <div class="cards-list">
+            {cityListings.map(item => (
+              <Card
+                slug={item.slug}
+                displayName={item.displayName}
+                city={item.city}
+                state={item.state}
+                rating={item.rating}
+                pricingMin={item.pricingMin}
+                pricingPeriod={item.pricingPeriod}
+                pricingNote={item.pricingNote}
+                dementiaCertified={item.nicheFields.dementiaCertified}
+                secureWanderGuard={item.nicheFields.secureWanderGuard}
+                medicaidAccepted={item.nicheFields.medicaidAccepted}
+              />
+            ))}
+          </div>
+
+          <!-- Comparison Table -->
+          <div class="section-heading mt-xl">
+            <h2>Side-by-Side Comparison</h2>
+            <p>Direct comparison of certified care features and minimum monthly fees.</p>
+          </div>
+          <ComparisonTable listings={cityListings} />
+
+          <!-- FAQ -->
+          <div class="section-heading mt-xl">
+            <h2>Frequently Asked Questions in {cityName}</h2>
+          </div>
+          <FAQ items={faqItems} />
+        </div>
+
+        <div class="sidebar-column">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .city-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .city-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 800px;
+  }
+
+  .city-content-grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .city-content-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .section-heading {
+    margin-bottom: var(--space-md);
+  }
+
+  .section-heading h2 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: var(--space-xs);
+  }
+
+  .section-heading p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .mt-xl {
+    margin-top: var(--space-2xl);
+  }
+</style>

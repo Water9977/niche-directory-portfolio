@@ -1,0 +1,128 @@
+---
+interface Props {
+  facilityName?: string;
+}
+
+const { facilityName } = Astro.props;
+---
+
+<div class="contact-form-container">
+  <div class="form-header">
+    <h3>Request Pricing & Availability</h3>
+    <p>Get a direct cost quote and check room availability at {facilityName || 'this facility'}.</p>
+  </div>
+  
+  <form class="contact-form" action="#" method="POST" id="leadForm">
+    {facilityName && (
+      <input type="hidden" name="facility" value={facilityName} />
+    )}
+    
+    <div class="form-group">
+      <label for="name">Your Name *</label>
+      <input type="text" id="name" name="name" required placeholder="John Doe" />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number *</label>
+      <input type="tel" id="phone" name="phone" required placeholder="(555) 555-5555" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" name="email" required placeholder="john@example.com" />
+    </div>
+
+    <div class="form-group">
+      <label for="careType">Expected Date of Move-in</label>
+      <select id="moveIn" name="moveIn">
+        <option value="asap">As soon as possible</option>
+        <option value="30days">Within 30 days</option>
+        <option value="60days">Within 60 days</option>
+        <option value="planning">Just planning/researching</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="message">Additional Questions / Care Needs</label>
+      <textarea id="message" name="message" rows="3" placeholder="Please mention if your loved one needs wander guard support, specialized nursing, or accepts Medicaid."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-accent btn-submit">Request Free Quote</button>
+  </form>
+</div>
+
+<style>
+  .contact-form-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 90px;
+  }
+
+  .form-header {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .form-header h3 {
+    color: #ffffff;
+    font-size: 1.15rem;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .form-header p {
+    color: var(--primary-light);
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  .contact-form {
+    padding: var(--space-lg);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-md);
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.65rem var(--space-sm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    transition: var(--transition);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.85rem;
+    font-size: 1rem;
+    margin-top: var(--space-xs);
+  }
+</style>

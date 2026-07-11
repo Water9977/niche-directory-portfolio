@@ -1,0 +1,73 @@
+---
+interface BreadcrumbItem {
+  name: string;
+  url?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-list">
+    <li class="breadcrumb-item">
+      <a href="/">Home</a>
+    </li>
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      return (
+        <li class="breadcrumb-item" aria-current={isLast ? "page" : undefined}>
+          <span class="separator">/</span>
+          {isLast || !item.url ? (
+            <span class="current-page">{item.name}</span>
+          ) : (
+            <a href={item.url}>{item.name}</a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb-nav {
+    margin-bottom: var(--space-lg);
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb-item a {
+    color: var(--text-muted);
+  }
+
+  .breadcrumb-item a:hover {
+    color: var(--primary);
+  }
+
+  .separator {
+    margin-left: var(--space-xs);
+    margin-right: var(--space-xs);
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .current-page {
+    color: var(--text-main);
+    font-weight: 600;
+  }
+</style>
