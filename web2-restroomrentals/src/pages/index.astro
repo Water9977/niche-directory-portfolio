@@ -51,6 +51,158 @@ const faqItems = [
     </div>
   </section>
 
+  <!-- Interactive Finder Section -->
+  <section id="finder" class="section finder-section" style="background-color: var(--secondary); border-bottom: 1px solid var(--border)">
+    <div class="container">
+      <h2 class="section-title">Interactive Trailer Finder</h2>
+      <p class="section-subtitle">Filter local luxury restroom suppliers dynamically by guest capacity, climate control, or ADA compliance.</p>
+      
+      <div class="filter-controls">
+        <div class="filter-group">
+          <h5>Required Event Capacity</h5>
+          <div class="checkbox-row">
+            <label><input type="radio" name="filter-stalls" value="0" checked /> Any Size</label>
+            <label><input type="radio" name="filter-stalls" value="2" /> 2+ Stalls (Up to 150 guests)</label>
+            <label><input type="radio" name="filter-stalls" value="3" /> 3+ Stalls (Up to 250 guests)</label>
+            <label><input type="radio" name="filter-stalls" value="5" /> 5+ Stalls (Up to 500 guests)</label>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <h5>Premium Features</h5>
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="filter-climate" /> Climate Controlled</label>
+            <label><input type="checkbox" id="filter-ada" /> ADA Accessible</label>
+            <label><input type="checkbox" id="filter-water" /> Running Water Sinks</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-3" id="suppliers-grid" style="margin-top: var(--space-xl)">
+        <!-- Rendered dynamically by JS -->
+      </div>
+      
+      <div class="no-results-msg" id="no-results-msg" style="display: none; text-align: center; padding: var(--space-xl); border: 1px dashed var(--border); border-radius: var(--radius-md); background: var(--bg-card)">
+        <p style="margin: 0; color: var(--text-muted); font-weight: 600">No restroom suppliers match your exact criteria. Try widening your capacity options!</p>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ listings }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('suppliers-grid');
+      const noResults = document.getElementById('no-results-msg');
+      
+      const filterStalls = document.getElementsByName('filter-stalls');
+      const filterClimate = document.getElementById('filter-climate');
+      const filterAda = document.getElementById('filter-ada');
+      const filterWater = document.getElementById('filter-water');
+      
+      const formatCost = (amount) => {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0
+        }).format(amount);
+      };
+      
+      const renderCards = (items) => {
+        grid.innerHTML = '';
+        if (items.length === 0) {
+          noResults.style.display = 'block';
+          return;
+        }
+        noResults.style.display = 'none';
+        
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'facility-card';
+          
+          const ratingBlock = item.rating 
+            ? `<span class="card-rating" style="display:flex; align-items:center; gap:2px; font-weight:600; font-size:0.85rem">
+                 ⭐ ${item.rating.toFixed(1)}
+               </span>`
+            : '';
+            
+          const pricingBlock = item.pricingMin
+            ? `<div>
+                 <span class="pricing-label" style="font-size:0.75rem; color:var(--text-muted)">Starting at</span>
+                 <span class="pricing-amount" style="font-size:1.15rem; font-weight:700; color:var(--primary)">${formatCost(item.pricingMin)}</span>
+                 <span class="pricing-period" style="font-size:0.75rem; color:var(--text-muted)">/${item.pricingPeriod.replace(/_/g, ' ')}</span>
+               </div>`
+            : `<span class="pricing-missing" style="font-size:0.85rem; color:var(--text-muted)">Contact for event pricing quote</span>`;
+            
+          card.innerHTML = `
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md); border-bottom:1px solid var(--border); padding-bottom:var(--space-xs)">
+              <span class="card-location" style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase">${item.city}, ${item.state.toUpperCase()}</span>
+              ${ratingBlock}
+            </div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:var(--space-sm); flex-grow:1">
+              <h3 class="card-title" style="margin:0; font-size:1.15rem">
+                <a href="/suppliers/${item.slug}" style="color:var(--text-main); font-weight:700">${item.displayName}</a>
+              </h3>
+              <div class="card-pricing" style="margin-bottom:var(--space-xs)">
+                ${pricingBlock}
+              </div>
+              
+              <div class="card-details" style="font-size:0.85rem; color:var(--text-muted)">
+                <strong>Stalls:</strong> ${item.nicheFields.stallsCount ? `${item.nicheFields.stallsCount} Station Trailer` : 'Varies'}
+              </div>
+              
+              <div class="card-badges" style="display:flex; gap:var(--space-xs); flex-wrap:wrap">
+                ${item.nicheFields.climateControlled ? '<span class="badge badge-success" style="background:#10b981; color:white; padding:2px 8px; border-radius:50px; font-size:0.75rem; font-weight:600">Climate Ctrl</span>' : ''}
+                ${item.nicheFields.adaCompliant ? '<span class="badge badge-primary" style="background:#3b82f6; color:white; padding:2px 8px; border-radius:50px; font-size:0.75rem; font-weight:600">♿ ADA</span>' : ''}
+                ${item.nicheFields.hasRunningWater ? '<span class="badge badge-outline" style="border:1px solid var(--border); color:var(--text-main); padding:2px 8px; border-radius:50px; font-size:0.75rem; font-weight:600">Sinks</span>' : ''}
+              </div>
+            </div>
+            <div class="card-footer" style="margin-top:var(--space-lg)">
+              <a href="/suppliers/${item.slug}" class="btn btn-outline" style="width:100%; text-align:center; display:block">Details & Quote</a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      };
+      
+      const filterListings = () => {
+        let filtered = listings;
+        
+        let minStalls = 0;
+        for (const radio of filterStalls) {
+          if (radio.checked) {
+            minStalls = parseInt(radio.value);
+            break;
+          }
+        }
+        
+        if (minStalls > 0) {
+          filtered = filtered.filter(item => (item.nicheFields.stallsCount || 0) >= minStalls);
+        }
+        
+        if (filterClimate.checked) {
+          filtered = filtered.filter(item => item.nicheFields.climateControlled === true);
+        }
+        if (filterAda.checked) {
+          filtered = filtered.filter(item => item.nicheFields.adaCompliant === true);
+        }
+        if (filterWater.checked) {
+          filtered = filtered.filter(item => item.nicheFields.hasRunningWater === true);
+        }
+        
+        renderCards(filtered);
+      };
+      
+      [filterClimate, filterAda, filterWater].forEach(checkbox => {
+        checkbox.addEventListener('change', filterListings);
+      });
+      
+      filterStalls.forEach(radio => {
+        radio.addEventListener('change', filterListings);
+      });
+      
+      renderCards(listings);
+    });
+  </script>
+
   <!-- Browse Section -->
   <section id="browse" class="section browse-section">
     <div class="container">
@@ -338,5 +490,50 @@ const faqItems = [
     .hero h1 {
       font-size: 2.25rem;
     }
+  }
+
+  /* Filter Dashboard Styles */
+  .filter-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  @media (min-width: 768px) {
+    .filter-controls {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .filter-group h5 {
+    margin-top: 0;
+    margin-bottom: var(--space-sm);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .checkbox-row {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+  .checkbox-row label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    cursor: pointer;
+  }
+  .checkbox-row input[type="checkbox"],
+  .checkbox-row input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
   }
 </style>

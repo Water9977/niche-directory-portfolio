@@ -4,6 +4,9 @@ import requests
 import json
 import time
 import sys
+import re
+import urllib.parse
+from urllib.parse import urlparse
 
 # Reconfigure terminal output to support UTF-8 on Windows
 if hasattr(sys.stdout, "reconfigure"):
@@ -48,6 +51,59 @@ def scrape_website_content(url):
         print(f"Firecrawl scrape request error for {url}: {e}")
         return None, None, 500
 
+def extract_key_subpages(homepage_url, markdown_content):
+    # Find links in markdown: [Anchor Text](URL)
+    links = re.findall(r'\[([^\]]*?)\]\((https?://[^\)]+|/[^\)]+)\)', markdown_content)
+    
+    parsed_home = urlparse(homepage_url)
+    home_domain = parsed_home.netloc.lower().replace("www.", "")
+    
+    key_links = []
+    seen_urls = set()
+    seen_urls.add(homepage_url.rstrip("/"))
+    
+    # Priority keywords for matching pricing, services, about pages
+    priority_keywords = ["price", "pricing", "rate", "cost", "fee", "rent", "rental", "about", "service", "amenities", "package", "packages"]
+    
+    for anchor, link_url in links:
+        # Resolve relative URLs
+        absolute_url = urllib.parse.urljoin(homepage_url, link_url).split("#")[0].rstrip("/")
+        
+        parsed_link = urlparse(absolute_url)
+        link_domain = parsed_link.netloc.lower().replace("www.", "")
+        
+        # Check if internal link
+        if link_domain == home_domain or not link_domain:
+            if absolute_url not in seen_urls:
+                priority = 0
+                anchor_lower = anchor.lower()
+                url_lower = absolute_url.lower()
+                
+                # Exclude obvious non-informational files or sections
+                if any(ext in url_lower for ext in [".pdf", ".jpg", ".png", ".zip", "tel:", "mailto:"]):
+                    continue
+                
+                for keyword in priority_keywords:
+                    if keyword in anchor_lower or keyword in url_lower:
+                        priority += 5
+                        if keyword in ["price", "pricing", "rate", "cost"]:
+                            priority += 5
+                            
+                key_links.append((absolute_url, priority))
+                seen_urls.add(absolute_url)
+                
+    key_links.sort(key=lambda x: x[1], reverse=True)
+    
+    # Select top 2 subpages that match priority keywords
+    top_subpages = [url for url, score in key_links if score > 0][:2]
+    
+    # If we still have less than 2, pad with general internal links
+    if len(top_subpages) < 2:
+        extra_pages = [url for url, score in key_links if score == 0]
+        top_subpages.extend(extra_pages[:2 - len(top_subpages)])
+        
+    return top_subpages
+
 def enrich_pending_websites(limit=20, niche=None):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -87,19 +143,32 @@ def enrich_pending_websites(limit=20, niche=None):
         print(f"\nCrawling site for business: '{name}'")
         print(f"URL: {url}")
         
-        # Call Firecrawl scrape
-        markdown, title, status_code = scrape_website_content(url)
+        # Scrape Homepage
+        homepage_markdown, title, status_code = scrape_website_content(url)
         
-        if markdown:
-            word_count = len(markdown.split())
-            print(f"Successfully scraped site. Word count: {word_count}. Status: {status_code}")
+        if homepage_markdown:
+            combined_markdown = f"# Homepage: {url}\n{homepage_markdown}"
+            
+            # Find and scrape key subpages (e.g. pricing)
+            subpages = extract_key_subpages(url, homepage_markdown)
+            if subpages:
+                print(f"Discovered relevant subpages for enrichment: {subpages}")
+                for subpage in subpages:
+                    print(f"  Scraping subpage: {subpage}")
+                    sub_md, sub_title, sub_status = scrape_website_content(subpage)
+                    if sub_md:
+                        combined_markdown += f"\n\n--- SUBPAGE: {subpage} ---\n{sub_md}"
+                        time.sleep(2)
+            
+            word_count = len(combined_markdown.split())
+            print(f"Successfully scraped site pages. Total word count: {word_count}. Status: {status_code}")
             
             try:
                 # Insert into scraped_pages
                 cursor.execute("""
                     INSERT INTO scraped_pages (raw_listing_id, url, page_markdown, page_title, word_count, http_status, scrape_status)
                     VALUES (?, ?, ?, ?, ?, ?, 'scraped')
-                """, (listing_id, url, markdown, title, word_count, status_code))
+                """, (listing_id, url, combined_markdown, title, word_count, status_code))
                 
                 # Update raw_listings
                 cursor.execute("""
@@ -109,11 +178,11 @@ def enrich_pending_websites(limit=20, niche=None):
                 """, (listing_id,))
                 
                 conn.commit()
-                print(f"Saved scraped content to DB for {name}.")
+                print(f"Saved combined scraped content to DB for {name}.")
             except Exception as e:
                 print(f"Database save error for {name}: {e}")
         else:
-            print(f"Failed to scrape {name}.")
+            print(f"Failed to scrape homepage for {name}.")
             try:
                 cursor.execute("""
                     UPDATE raw_listings 

@@ -1,0 +1,110 @@
+---
+// AffiliateCard.astro
+---
+
+<div class="affiliate-card">
+  <div class="card-tag">Nomad Gear Choice</div>
+  <h4>Recommended Connectivity Hardware</h4>
+  <p class="affiliate-desc">If the cell signal is reported as "Weak" or "Medium" at this park, we recommend using a high-gain signal booster or Starlink kit to ensure stable internet access.</p>
+  
+  <div class="gear-list">
+    <div class="gear-item">
+      <span class="gear-icon">📡</span>
+      <div class="gear-info">
+        <h5>weBoost Drive Reach RV</h5>
+        <p>Best cellular signal booster for moving & stationary RVs. Boosts all US carriers by up to 32x.</p>
+      </div>
+    </div>
+    
+    <div class="gear-item">
+      <span class="gear-icon">🛰️</span>
+      <div class="gear-info">
+        <h5>Starlink Roam Kit</h5>
+        <p>Best for remote sites with clear sky view. Connect anywhere with high-speed satellite broadband.</p>
+      </div>
+    </div>
+  </div>
+  
+  <a href="https://amazon.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm affiliate-btn">
+    View Booster Kits on Amazon ↗
+  </a>
+  <span class="disclaimer">As an Amazon Associate we earn from qualifying purchases at no extra cost to you.</span>
+</div>
+
+<style>
+  .affiliate-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-tag {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    background-color: var(--color-primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .affiliate-card h4 {
+    margin-top: 0;
+    margin-bottom: var(--space-sm);
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    max-width: 70%;
+  }
+  .affiliate-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    line-height: 1.4;
+  }
+  .gear-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+  .gear-item {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+  .gear-icon {
+    font-size: 1.5rem;
+  }
+  .gear-info h5 {
+    margin: 0 0 2px 0;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+  .gear-info p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.3;
+  }
+  .affiliate-btn {
+    width: 100%;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .disclaimer {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: var(--space-sm);
+    text-align: center;
+    line-height: 1.2;
+  }
+</style>

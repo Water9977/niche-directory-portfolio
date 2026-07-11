@@ -1,0 +1,104 @@
+---
+interface Props {
+  stallsCount: number;
+  climateControlled: boolean;
+  adaCompliant: boolean;
+  displayName: string;
+}
+
+const { stallsCount, climateControlled, adaCompliant, displayName } = Astro.props;
+
+// Determine guest capacity recommendation based on stall counts
+let capacity = "Up to 75 guests";
+if (stallsCount === 2) capacity = "Up to 150 guests";
+else if (stallsCount >= 3 && stallsCount <= 5) capacity = "Up to 250 guests";
+else if (stallsCount > 5) capacity = "Up to 500+ guests";
+---
+
+<div class="fleet-card">
+  <div class="fleet-header">
+    <div class="fleet-icon">🚚</div>
+    <div class="fleet-title">
+      <h4>{displayName} Trailer Specs</h4>
+      <p class="fleet-capacity">Ideal for {capacity}</p>
+    </div>
+  </div>
+  
+  <div class="fleet-specs">
+    <div class="spec-row">
+      <span class="spec-label">Stall Count:</span>
+      <span class="spec-value">{stallsCount || 2}-Station Layout</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">Climate Control:</span>
+      <span class="spec-value">{climateControlled ? "🔥 A/C & Heating" : "🔌 Ventilation Only"}</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">ADA Compliance:</span>
+      <span class="spec-value">{adaCompliant ? "♿ Fully Accessible" : "🚶 Step-up Entrance"}</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">Power Required:</span>
+      <span class="spec-value">1-2 Dedicated 20-Amp Outlets</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">Water Source:</span>
+      <span class="spec-value">Garden hose connection or internal tank</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .fleet-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    font-size: 0.95rem;
+  }
+  .fleet-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-sm);
+  }
+  .fleet-icon {
+    font-size: 2rem;
+  }
+  .fleet-title h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+  .fleet-capacity {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-success);
+    font-weight: 600;
+  }
+  .fleet-specs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-xs) 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .spec-row:last-child {
+    border-bottom: none;
+  }
+  .spec-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .spec-value {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>

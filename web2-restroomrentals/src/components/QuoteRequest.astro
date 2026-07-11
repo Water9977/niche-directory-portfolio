@@ -1,0 +1,137 @@
+---
+interface Props {
+  businessName: string;
+}
+
+const { businessName } = Astro.props;
+---
+
+<div class="quote-form-container">
+  <h3>Request Event Quote from {businessName}</h3>
+  <p class="form-desc">Get an accurate delivery, setup, and rental quote for your event location.</p>
+  
+  <form class="quote-form" action="#" method="POST" onsubmit="event.preventDefault(); alert('Quote request sent! The supplier will contact you within 24 hours.');">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="event-date">Event Date</label>
+        <input type="date" id="event-date" name="event-date" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="event-type">Event Type</label>
+        <select id="event-type" name="event-type" required>
+          <option value="">Select event type...</option>
+          <option value="wedding">Wedding / Bridal Reception</option>
+          <option value="outdoor-party">Outdoor Private Party</option>
+          <option value="corporate">Corporate Outing / VIP Event</option>
+          <option value="festival">Festival / Concert / Sporting</option>
+          <option value="construction">Long-Term Commercial Use</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="guest-count">Estimated Guest Count</label>
+        <select id="guest-count" name="guest-count" required>
+          <option value="">Select guest count...</option>
+          <option value="50">Fewer than 50 guests</option>
+          <option value="150">50 - 150 guests</option>
+          <option value="250">150 - 250 guests</option>
+          <option value="500">250 - 500 guests</option>
+          <option value="1000">500+ guests</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Rental Duration</label>
+        <select id="duration" name="duration" required>
+          <option value="1-day">Single Day Event</option>
+          <option value="weekend">Full Weekend (Fri-Sun)</option>
+          <option value="weekly">1 Week</option>
+          <option value="monthly">Monthly / Long-term Contract</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="delivery-address">Event Delivery Location (City, Zip Code)</label>
+      <input type="text" id="delivery-address" name="delivery-address" placeholder="e.g. McKinney, TX 75070" required />
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="client-name">Your Name</label>
+        <input type="text" id="client-name" name="client-name" required />
+      </div>
+      <div class="form-group">
+        <label for="client-email">Email Address</label>
+        <input type="email" id="client-email" name="client-email" required />
+      </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary btn-block">Request Free Rental Quote</button>
+  </form>
+</div>
+
+<style>
+  .quote-form-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+  .quote-form-container h3 {
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    font-size: 1.3rem;
+  }
+  .form-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-lg);
+  }
+  .quote-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  @media (min-width: 600px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .form-group input,
+  .form-group select {
+    padding: var(--space-sm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  .btn-block {
+    width: 100%;
+    margin-top: var(--space-sm);
+  }
+</style>

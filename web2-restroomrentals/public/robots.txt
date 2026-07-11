@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luxuryrestroomrentals.com/sitemap-index.xml

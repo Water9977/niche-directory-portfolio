@@ -55,6 +55,151 @@ const faqItems = [
     </div>
   </section>
 
+  <!-- Interactive Finder Section -->
+  <section id="finder" class="section finder-section" style="background-color: var(--secondary); border-bottom: 1px solid var(--border)">
+    <div class="container">
+      <h2 class="section-title">Interactive Nomad Finder</h2>
+      <p class="section-subtitle">Filter campgrounds dynamically by verified cellular signal strength, Starlink clearance, or Wi-Fi availability.</p>
+      
+      <div class="filter-controls">
+        <div class="filter-group">
+          <h5>Cellular Carriers (Strong/Medium Signal)</h5>
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="filter-verizon" /> Verizon</label>
+            <label><input type="checkbox" id="filter-tmobile" /> T-Mobile</label>
+            <label><input type="checkbox" id="filter-att" /> AT&T</label>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <h5>Wifi & Satellite Standards</h5>
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="filter-wifi" /> Verified Wi-Fi Available</label>
+            <label><input type="checkbox" id="filter-starlink" /> Starlink Friendly</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-3" id="campgrounds-grid" style="margin-top: var(--space-xl)">
+        <!-- Rendered dynamically by JS -->
+      </div>
+      
+      <div class="no-results-msg" id="no-results-msg" style="display: none; text-align: center; padding: var(--space-xl); border: 1px dashed var(--border); border-radius: var(--radius-md); background: var(--bg-card)">
+        <p style="margin: 0; color: var(--text-muted); font-weight: 600">No campgrounds match your exact connectivity criteria. Try clearing some filters!</p>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ listings }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('campgrounds-grid');
+      const noResults = document.getElementById('no-results-msg');
+      
+      const filterVerizon = document.getElementById('filter-verizon');
+      const filterTMobile = document.getElementById('filter-tmobile');
+      const filterAtt = document.getElementById('filter-att');
+      const filterWifi = document.getElementById('filter-wifi');
+      const filterStarlink = document.getElementById('filter-starlink');
+      
+      const formatCost = (amount) => {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0
+        }).format(amount);
+      };
+      
+      const renderCards = (items) => {
+        grid.innerHTML = '';
+        if (items.length === 0) {
+          noResults.style.display = 'block';
+          return;
+        }
+        noResults.style.display = 'none';
+        
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'facility-card';
+          
+          const ratingBlock = item.rating 
+            ? `<span class="card-rating" style="display:flex; align-items:center; gap:2px; font-weight:600; font-size:0.85rem">
+                 ⭐ ${item.rating.toFixed(1)}
+               </span>`
+            : '';
+            
+          const pricingBlock = item.pricingMin
+            ? `<div>
+                 <span class="pricing-label" style="font-size:0.75rem; color:var(--text-muted)">Starting at</span>
+                 <span class="pricing-amount" style="font-size:1.15rem; font-weight:700; color:var(--primary)">${formatCost(item.pricingMin)}</span>
+                 <span class="pricing-period" style="font-size:0.75rem; color:var(--text-muted)">/${item.pricingPeriod}</span>
+               </div>`
+            : `<span class="pricing-missing" style="font-size:0.85rem; color:var(--text-muted)">Call for rates</span>`;
+            
+          card.innerHTML = `
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md); border-bottom:1px solid var(--border); padding-bottom:var(--space-xs)">
+              <span class="card-location" style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase">${item.city}, ${item.state.toUpperCase()}</span>
+              ${ratingBlock}
+            </div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:var(--space-sm); flex-grow:1">
+              <h3 class="card-title" style="margin:0; font-size:1.15rem">
+                <a href="/parks/${item.slug}" style="color:var(--text-main); font-weight:700">${item.displayName}</a>
+              </h3>
+              <div class="card-pricing" style="margin-bottom:var(--space-xs)">
+                ${pricingBlock}
+              </div>
+              
+              <div class="card-signals" style="background:var(--bg-body); border:1px solid var(--border); border-radius:var(--radius-sm); padding:var(--space-xs)">
+                <span class="signals-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted)">Signal Strength:</span>
+                <div style="font-size:0.8rem; margin-top:2px; display:flex; gap:var(--space-md)">
+                  <div>Verizon: <span style="font-weight:700" class="text-sig-${item.nicheFields.verizonSignal || 'none'}">${item.nicheFields.verizonSignal || 'unreported'}</span></div>
+                  <div>T-Mobile: <span style="font-weight:700" class="text-sig-${item.nicheFields.tmobileSignal || 'none'}">${item.nicheFields.tmobileSignal || 'unreported'}</span></div>
+                </div>
+              </div>
+              
+              <div class="card-badges" style="display:flex; gap:var(--space-xs); flex-wrap:wrap">
+                ${item.nicheFields.wifiAvailable ? '<span class="badge badge-success" style="background:#10b981; color:white; padding:2px 8px; border-radius:50px; font-size:0.75rem; font-weight:600">Wi-Fi</span>' : ''}
+                ${item.nicheFields.starlinkFriendly ? '<span class="badge badge-primary" style="background:#3b82f6; color:white; padding:2px 8px; border-radius:50px; font-size:0.75rem; font-weight:600">Starlink OK</span>' : ''}
+                ${item.nicheFields.maxRvLengthFt ? `<span class="badge badge-outline" style="border:1px solid var(--border); color:var(--text-main); padding:2px 8px; border-radius:50px; font-size:0.75rem; font-weight:600">Up to ${item.nicheFields.maxRvLengthFt}ft</span>` : ''}
+              </div>
+            </div>
+            <div class="card-footer" style="margin-top:var(--space-lg)">
+              <a href="/parks/${item.slug}" class="btn btn-outline" style="width:100%; text-align:center; display:block">Signal Report</a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      };
+      
+      const filterListings = () => {
+        let filtered = listings;
+        
+        if (filterVerizon.checked) {
+          filtered = filtered.filter(item => ['strong', 'medium'].includes((item.nicheFields.verizonSignal || '').toLowerCase()));
+        }
+        if (filterTMobile.checked) {
+          filtered = filtered.filter(item => ['strong', 'medium'].includes((item.nicheFields.tmobileSignal || '').toLowerCase()));
+        }
+        if (filterAtt.checked) {
+          filtered = filtered.filter(item => ['strong', 'medium'].includes((item.nicheFields.attSignal || '').toLowerCase()));
+        }
+        if (filterWifi.checked) {
+          filtered = filtered.filter(item => item.nicheFields.wifiAvailable === true);
+        }
+        if (filterStarlink.checked) {
+          filtered = filtered.filter(item => item.nicheFields.starlinkFriendly === true);
+        }
+        
+        renderCards(filtered);
+      };
+      
+      [filterVerizon, filterTMobile, filterAtt, filterWifi, filterStarlink].forEach(checkbox => {
+        checkbox.addEventListener('change', filterListings);
+      });
+      
+      renderCards(listings);
+    });
+  </script>
+
   <!-- Browse Section -->
   <section id="browse" class="section browse-section">
     <div class="container">
@@ -344,4 +489,52 @@ const faqItems = [
       font-size: 2.25rem;
     }
   }
+
+  /* Filter Dashboard Styles */
+  .filter-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  @media (min-width: 768px) {
+    .filter-controls {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .filter-group h5 {
+    margin-top: 0;
+    margin-bottom: var(--space-sm);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .checkbox-row {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+  .checkbox-row label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    cursor: pointer;
+  }
+  .checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  .text-sig-strong { color: var(--text-success); }
+  .text-sig-medium { color: #d97706; }
+  .text-sig-weak { color: #dc2626; }
+  .text-sig-none { color: var(--text-secondary); }
 </style>

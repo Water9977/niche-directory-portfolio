@@ -88,9 +88,9 @@ Each directory monetizes through a mix of:
 | ✅ Architecture & Schema Design | Complete |
 | ✅ Target City Lists | Complete |
 | ✅ AI Prompt Templates | Complete |
-| 🔲 Data Pipeline Implementation | Planned |
-| 🔲 Astro Site Scaffolding | Planned |
-| 🔲 First Scrape & Build | Planned |
+| ✅ Data Pipeline Implementation | Complete (Playwright + Firecrawl + Gemini Fallbacks) |
+| ✅ Astro Site Scaffolding | Complete (Clean Vanilla CSS + Interactive Filters) |
+| ✅ First Scrape & Build | Complete (Texas / Montana Seed Sets) |
 | 🔲 Domain Purchase & Deployment | Planned |
 
 ---

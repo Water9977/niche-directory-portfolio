@@ -6,44 +6,47 @@ import AmenityBadges from '../../components/AmenityBadges.astro';
 import ContactForm from '../../components/ContactForm.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import MapEmbed from '../../components/MapEmbed.astro';
+import FleetCard from '../../components/FleetCard.astro';
+import QuoteRequest from '../../components/QuoteRequest.astro';
+import DeliveryMap from '../../components/DeliveryMap.astro';
 
 export async function getStaticPaths() {
   if (listings.length === 0) {
     return [
       {
-        params: { slug: 'sample-rv-park' },
+        params: { slug: 'sample-luxury-restrooms' },
         props: {
           listing: {
-            slug: 'sample-rv-park',
-            displayName: 'Sample RV Resort',
-            city: 'Moab',
-            state: 'UT',
-            zipCode: '84532',
-            fullAddress: 'Moab, UT 84532',
+            slug: 'sample-luxury-restrooms',
+            displayName: 'Sample Luxury Restrooms',
+            city: 'McKinney',
+            state: 'TX',
+            zipCode: '75070',
+            fullAddress: 'McKinney, TX 75070',
             latitude: null,
             longitude: null,
             phone: '(555) 555-5555',
             website: 'https://example.com',
-            rating: 4.6,
-            reviewsCount: 22,
-            pricingMin: 65,
-            pricingMax: 110,
-            pricingPeriod: 'night',
-            pricingNote: 'Prices vary by season and site size',
-            amenities: ['Full Hookups', 'Pull-through Sites', 'Swimming Pool', 'Dog Park', 'Shower Facilities'],
-            aiSummary: 'A modern, nomad-friendly RV resort with excellent Starlink clearance and high-speed Wi-Fi throughout the park.',
-            aiPros: ['Verizon 5G ultra wideband', 'Clear northern sky for Starlink'],
-            aiCons: ['AT&T signal drops near canyon areas'],
-            sourceSnippet: 'Starlink-friendly campsites starting at $65',
+            rating: 4.8,
+            reviewsCount: 12,
+            pricingMin: 850,
+            pricingMax: 1500,
+            pricingPeriod: 'per_event',
+            pricingNote: 'Delivery and set up included',
+            amenities: ['Air Conditioning', 'Stereo System', 'Vanity Mirrors', 'Running Water'],
+            aiSummary: 'A premier event sanitation provider specializing in weddings and outdoor parties.',
+            aiPros: ['High-end luxury interiors', 'Climate controlled units'],
+            aiCons: ['Requires water hookup'],
+            sourceSnippet: 'Starting from $850 for weekend rentals',
             nicheFields: {
-              verizonSignal: 'strong',
-              tmobileSignal: 'medium',
-              attSignal: 'weak',
-              wifiAvailable: true,
-              wifiSpeedMbps: 85,
-              starlinkFriendly: true,
-              maxRvLengthFt: 45,
-              hasFullHookups: true
+              stallsCount: 4,
+              climateControlled: true,
+              adaCompliant: true,
+              rentalPriceEst: 850,
+              deliveryRadiusMiles: 50,
+              suitedForEvents: ['weddings', 'parties'],
+              hasRunningWater: true,
+              hasFlushingToilets: true
             },
             lastVerified: '2026-07-11 12:00:00'
           }
@@ -63,13 +66,9 @@ export async function getStaticPaths() {
 const { listing } = Astro.props;
 
 const stateNames: Record<string, string> = {
-  mt: 'Montana',
-  ut: 'Utah',
-  az: 'Arizona',
-  co: 'Colorado',
+  tx: 'Texas',
   tn: 'Tennessee',
-  me: 'Maine',
-  sd: 'South Dakota'
+  nc: 'North Carolina'
 };
 const stateName = stateNames[listing.state.toLowerCase()] || listing.state.toUpperCase();
 
@@ -81,7 +80,7 @@ const breadcrumbItems = [
 
 const schema = JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "RVPark",
+  "@type": "LocalBusiness",
   "name": listing.displayName,
   "address": {
     "@type": "PostalAddress",
@@ -96,13 +95,13 @@ const schema = JSON.stringify({
     "ratingValue": listing.rating,
     "reviewCount": listing.reviewsCount || 1
   } : undefined,
-  "priceRange": listing.pricingMin ? `$${listing.pricingMin}-$${listing.pricingMax || listing.pricingMin}` : "Call for rates"
+  "priceRange": listing.pricingMin ? `$${listing.pricingMin}/event` : "Request event quote"
 });
 ---
 
 <Layout
-  title={`${listing.displayName} – Cell Signal & RV Sites in ${listing.city}, ${listing.state.toUpperCase()}`}
-  description={`Verizon/T-Mobile signal reports, Wi-Fi speed tests, and specifications for ${listing.displayName} in ${listing.city}, ${listing.state.toUpperCase()}.`}
+  title={`${listing.displayName} – Luxury Restroom Trailers in ${listing.city}, ${listing.state.toUpperCase()}`}
+  description={`Pricing, stall capacities, and specs for ${listing.displayName} in ${listing.city}, ${listing.state.toUpperCase()}.`}
   schemaMarkup={schema}
 >
   <div class="facility-container section">
@@ -136,13 +135,13 @@ const schema = JSON.stringify({
           />
 
           <div class="profile-section">
-            <h2>Nomad Internet & Signal Summary</h2>
+            <h2>AI Review & Verification</h2>
             <p class="summary-text">{listing.aiSummary}</p>
             
             <div class="pros-cons-grid">
               {listing.aiPros && listing.aiPros.length > 0 && (
                 <div class="pros-box">
-                  <h4>Connectivity Pros</h4>
+                  <h4>Highlights</h4>
                   <ul>
                     {listing.aiPros.map((pro: string) => (
                       <li>{pro}</li>
@@ -152,7 +151,7 @@ const schema = JSON.stringify({
               )}
               {listing.aiCons && listing.aiCons.length > 0 && (
                 <div class="cons-box">
-                  <h4>Connectivity Cons</h4>
+                  <h4>Logistics Details</h4>
                   <ul>
                     {listing.aiCons.map((con: string) => (
                       <li>{con}</li>
@@ -164,57 +163,53 @@ const schema = JSON.stringify({
           </div>
 
           <div class="profile-section">
-            <h2>Verified Connectivity Audits</h2>
+            <h2>Trailer Specifications</h2>
             <div class="features-grid">
               <div class="feature-item">
-                <span class="feature-label">Verizon Signal:</span>
-                <span class={`val-yes sig-${listing.nicheFields.verizonSignal || 'none'}`}>
-                  {listing.nicheFields.verizonSignal ? `${listing.nicheFields.verizonSignal.toUpperCase()}` : 'No report'}
+                <span class="feature-label">Maximum Stall Count:</span>
+                <span class="val-yes">{listing.nicheFields.stallsCount ? `${listing.nicheFields.stallsCount} Station Trailer` : "Varies / Contact"}</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-label">Climate Controlled (AC/Heat):</span>
+                <span class={listing.nicheFields.climateControlled ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.climateControlled ? "Yes (Verified)" : "No / Standard ventilation"}
                 </span>
               </div>
               <div class="feature-item">
-                <span class="feature-label">T-Mobile Signal:</span>
-                <span class={`val-yes sig-${listing.nicheFields.tmobileSignal || 'none'}`}>
-                  {listing.nicheFields.tmobileSignal ? `${listing.nicheFields.tmobileSignal.toUpperCase()}` : 'No report'}
+                <span class="feature-label">ADA Compliant units:</span>
+                <span class={listing.nicheFields.adaCompliant ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.adaCompliant ? "Yes (Available)" : "No / Standard units only"}
                 </span>
               </div>
               <div class="feature-item">
-                <span class="feature-label">AT&T Signal:</span>
-                <span class={`val-yes sig-${listing.nicheFields.attSignal || 'none'}`}>
-                  {listing.nicheFields.attSignal ? `${listing.nicheFields.attSignal.toUpperCase()}` : 'No report'}
+                <span class="feature-label">Running Water Sinks:</span>
+                <span class={listing.nicheFields.hasRunningWater ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.hasRunningWater ? "Yes (Hands-free vanity)" : "No / Hand sanitizer only"}
                 </span>
               </div>
               <div class="feature-item">
-                <span class="feature-label">Campground Wi-Fi speed:</span>
-                <span class="val-ratio">
-                  {listing.nicheFields.wifiAvailable ? (
-                    listing.nicheFields.wifiSpeedMbps ? `${listing.nicheFields.wifiSpeedMbps} Mbps` : 'Available (Speed Unmeasured)'
-                  ) : (
-                    'No Public Wi-Fi'
-                  )}
+                <span class="feature-label">Flushing Toilets:</span>
+                <span class={listing.nicheFields.hasFlushingToilets ? "val-yes" : "val-no"}>
+                  {listing.nicheFields.hasFlushingToilets ? "Yes (Pedal/hands-free flush)" : "No / Gravity drop only"}
                 </span>
               </div>
-              <div class="feature-item">
-                <span class="feature-label">Starlink Clear Sky:</span>
-                <span class={listing.nicheFields.starlinkFriendly ? "val-yes" : "val-no"}>
-                  {listing.nicheFields.starlinkFriendly ? "Yes (Good clearance)" : "No / Heavy tree cover"}
-                </span>
-              </div>
-              <div class="feature-item">
-                <span class="feature-label">Max RV Length:</span>
-                <span class="val-ratio">{listing.nicheFields.maxRvLengthFt ? `${listing.nicheFields.maxRvLengthFt} Feet` : "Varies"}</span>
-              </div>
+              {listing.nicheFields.deliveryRadiusMiles && (
+                <div class="feature-item">
+                  <span class="feature-label">Free Delivery Zone:</span>
+                  <span class="val-ratio">Up to {listing.nicheFields.deliveryRadiusMiles} miles</span>
+                </div>
+              )}
             </div>
           </div>
 
           <div class="profile-section">
-            <h2>Campground Amenities</h2>
+            <h2>Premium Specs & Amenities</h2>
             <AmenityBadges amenities={listing.amenities} />
           </div>
 
           {listing.fullAddress && (
             <div class="profile-section">
-              <h2>Campground Location</h2>
+              <h2>Service Depot Location</h2>
               <p class="address-text">{listing.fullAddress}</p>
               <MapEmbed address={listing.fullAddress} />
             </div>
@@ -226,7 +221,13 @@ const schema = JSON.stringify({
         </div>
 
         <div class="profile-sidebar">
-          <ContactForm facilityName={listing.displayName} />
+          <QuoteRequest businessName={listing.displayName} />
+          <div style="margin-top: var(--space-lg)">
+            <DeliveryMap city={listing.city} state={listing.state} deliveryRadiusMiles={listing.nicheFields.deliveryRadiusMiles} />
+          </div>
+          <div style="margin-top: var(--space-lg)">
+            <FleetCard stallsCount={listing.nicheFields.stallsCount} climateControlled={listing.nicheFields.climateControlled} adaCompliant={listing.nicheFields.adaCompliant} displayName={listing.displayName} />
+          </div>
         </div>
       </div>
     </div>
@@ -322,7 +323,7 @@ const schema = JSON.stringify({
     margin-bottom: var(--space-xs);
   }
 
-  .pros-box h4 { color: var(--primary); }
+  .pros-box h4 { color: var(--accent); }
   .cons-box h4 { color: var(--text-muted); }
 
   .pros-box ul,
@@ -405,11 +406,6 @@ const schema = JSON.stringify({
     color: var(--accent);
     margin-top: 2px;
   }
-
-  .sig-strong { color: var(--success); }
-  .sig-medium { color: var(--accent); }
-  .sig-weak { color: #e53e3e; }
-  .sig-none { color: var(--text-muted); }
 
   .address-text {
     font-size: 1rem;

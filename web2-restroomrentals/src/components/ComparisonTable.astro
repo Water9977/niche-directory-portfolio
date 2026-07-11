@@ -47,7 +47,7 @@ const formatCost = (cost: number) => {
       {listings.map((item) => (
         <tr>
           <td class="col-name">
-            <strong><a href={`/facilities/${item.slug}`}>{item.displayName}</a></strong>
+            <strong><a href={`/suppliers/${item.slug}`}>{item.displayName}</a></strong>
           </td>
           <td class="col-cost">
             {item.pricingMin ? `${formatCost(item.pricingMin)}/${item.pricingPeriod}` : 'Request quote'}
@@ -89,7 +89,7 @@ const formatCost = (cost: number) => {
             )}
           </td>
           <td class="col-action">
-            <a href={`/facilities/${item.slug}`} class="btn btn-primary btn-sm">Get Quote</a>
+            <a href={`/suppliers/${item.slug}`} class="btn btn-primary btn-sm">Get Quote</a>
           </td>
         </tr>
       ))}

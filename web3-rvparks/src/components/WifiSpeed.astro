@@ -1,0 +1,136 @@
+---
+interface Props {
+  wifiAvailable: boolean;
+  wifiSpeedMbps: number;
+  starlinkFriendly: boolean;
+}
+
+const { wifiAvailable, wifiSpeedMbps = 0, starlinkFriendly } = Astro.props;
+
+// Determine suitability list
+let suitability = "No public park Wi-Fi reported.";
+let statusColor = "text-muted";
+if (wifiAvailable) {
+  if (wifiSpeedMbps >= 100) {
+    suitability = "🔥 Heavy Remote Work, 4K Streaming, Zoom Calls, Gaming (Multi-Device)";
+    statusColor = "text-success";
+  } else if (wifiSpeedMbps >= 50) {
+    suitability = "💻 Standard Remote Work, Video Calls, HD Streaming (2-3 devices)";
+    statusColor = "text-success";
+  } else if (wifiSpeedMbps >= 15) {
+    suitability = "📧 Basic Email, Web Browsing, Audio Calls (Low Bandwidth)";
+    statusColor = "text-warning";
+  } else {
+    suitability = "🐌 Slow/Unreliable. Expect connection drops. Off-grid prep recommended.";
+    statusColor = "text-danger";
+  }
+}
+---
+
+<div class="wifi-speed-card">
+  <div class="wifi-header">
+    <span class="wifi-icon">⚡</span>
+    <h4>Wi-Fi & Connectivity Speed</h4>
+  </div>
+  
+  <div class="wifi-info">
+    <div class="info-row">
+      <span class="info-label">Public Park Wi-Fi:</span>
+      <span class={`info-val ${wifiAvailable ? 'text-success' : 'text-danger'}`}>
+        {wifiAvailable ? 'Available' : 'Not Available'}
+      </span>
+    </div>
+    
+    {wifiAvailable && (
+      <div class="info-row">
+        <span class="info-label">Verified Speed:</span>
+        <span class="info-val speed-val">{wifiSpeedMbps} Mbps</span>
+      </div>
+    )}
+    
+    <div class="info-row">
+      <span class="info-label">Starlink Compatibility:</span>
+      <span class={`info-val ${starlinkFriendly ? 'text-success' : 'text-warning'}`}>
+        {starlinkFriendly ? '🛰️ High (Clear Sky View)' : '🌲 Tree Cover (Obstructions)'}
+      </span>
+    </div>
+  </div>
+  
+  <div class="wifi-suitability">
+    <span class="suitability-label">Remote Work Suitability:</span>
+    <p class={`suitability-desc ${statusColor}`}>{suitability}</p>
+  </div>
+</div>
+
+<style>
+  .wifi-speed-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  .wifi-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-xs);
+  }
+  .wifi-header h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+  }
+  .wifi-icon {
+    font-size: 1.3rem;
+  }
+  .wifi-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+  .info-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .info-val {
+    font-weight: 600;
+  }
+  .speed-val {
+    font-size: 1.05rem;
+    color: var(--color-primary);
+  }
+  .wifi-suitability {
+    background-color: var(--bg-body);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm);
+    border-left: 3px solid var(--border);
+  }
+  .suitability-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .suitability-desc {
+    font-size: 0.85rem;
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  
+  .text-success { color: var(--text-success); }
+  .text-warning { color: #d97706; }
+  .text-danger { color: #dc2626; }
+  .text-muted { color: var(--text-secondary); }
+</style>

@@ -1,0 +1,134 @@
+---
+interface Props {
+  verizonSignal: string;
+  tmobileSignal: string;
+  attSignal: string;
+}
+
+const { verizonSignal = 'none', tmobileSignal = 'none', attSignal = 'none' } = Astro.props;
+
+// Convert signal strings to numbers for visual bars
+const getSignalStrength = (sig: string | null) => {
+  const s = (sig || 'none').toLowerCase();
+  if (s === 'strong') return { level: 4, class: 'sig-strong', desc: 'Strong (5G / LTE)' };
+  if (s === 'medium') return { level: 2, class: 'sig-medium', desc: 'Medium (LTE)' };
+  if (s === 'weak') return { level: 1, class: 'sig-weak', desc: 'Weak (Roaming/3G)' };
+  return { level: 0, class: 'sig-none', desc: 'No Service' };
+};
+
+const carriers = [
+  { name: 'Verizon Wireless', ...getSignalStrength(verizonSignal), color: '#d50000' },
+  { name: 'T-Mobile US', ...getSignalStrength(tmobileSignal), color: '#ea0a8e' },
+  { name: 'AT&T Mobility', ...getSignalStrength(attSignal), color: '#0057b8' }
+];
+---
+
+<div class="signal-dashboard">
+  <h4>Cellular Coverage Report</h4>
+  <p class="dashboard-desc">Verified signal strengths at campsite locations. Booster recommended for weak zones.</p>
+  
+  <div class="carrier-list">
+    {carriers.map(carrier => (
+      <div class="carrier-item">
+        <div class="carrier-header">
+          <span class="carrier-title" style={`border-left: 3px solid ${carrier.color}; padding-left: var(--space-xs)`}>
+            {carrier.name}
+          </span>
+          <span class={`carrier-desc ${carrier.class}`}>{carrier.desc}</span>
+        </div>
+        
+        <div class="signal-bars">
+          {[1, 2, 3, 4].map(barIndex => (
+            <div 
+              class={`bar bar-${barIndex} ${barIndex <= carrier.level ? 'filled' : ''} ${carrier.class}`}
+            />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .signal-dashboard {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  .signal-dashboard h4 {
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    font-size: 1.05rem;
+    color: var(--text-primary);
+  }
+  .dashboard-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    line-height: 1.3;
+  }
+  .carrier-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .carrier-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: var(--space-xs);
+  }
+  .carrier-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .carrier-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .carrier-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .carrier-desc {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .signal-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 24px;
+    width: 32px;
+  }
+  .bar {
+    width: 5px;
+    background-color: var(--border);
+    border-radius: 1px;
+    transition: background-color 0.2s;
+  }
+  .bar-1 { height: 6px; }
+  .bar-2 { height: 12px; }
+  .bar-3 { height: 18px; }
+  .bar-4 { height: 24px; }
+  
+  /* Color classes for filled signal bars */
+  .filled.sig-strong {
+    background-color: var(--color-success);
+  }
+  .filled.sig-medium {
+    background-color: #f59e0b; /* Amber */
+  }
+  .filled.sig-weak {
+    background-color: #ef4444; /* Red */
+  }
+  .sig-strong { color: var(--text-success); }
+  .sig-medium { color: #d97706; }
+  .sig-weak { color: #dc2626; }
+  .sig-none { color: var(--text-secondary); }
+</style>
